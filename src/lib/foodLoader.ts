@@ -3,12 +3,17 @@ export interface Food {
 	allenNote: string;
 	servingG: number;
 	calories: number;
-	fatG: number;
+	saturatedFatG: number;
 	sodiumMg: number;
 	fibreG: number;
 	totalSugarG: number;
 	proteinG: number;
 	source: string;
+}
+
+// Helper function to clean quotes from CSV fields
+function cleanQuotes(value: string): string {
+	return value.replace(/^"|"$/g, '');
 }
 
 export async function loadFoods(): Promise<Food[]> {
@@ -78,16 +83,16 @@ export async function loadFoods(): Promise<Food[]> {
 				};
 
 				return {
-					name: name.replace(/^"|"$/g, ''),
-					allenNote: allenNote.replace(/^"|"$/g, ''),
+					name: cleanQuotes(name),
+					allenNote: cleanQuotes(allenNote),
 					servingG: parseNumber(servingG),
 					calories: parseNumber(calories),
-					fatG: parseNumber(fatG),
+					saturatedFatG: parseNumber(fatG) * 0.1, // Estimate saturated fat as 10% of total fat, spreadsheet needs updated
 					sodiumMg: parseNumber(sodiumMg),
 					fibreG: parseNumber(fibreG),
 					totalSugarG: parseNumber(totalSugarG),
 					proteinG: parseNumber(proteinG),
-					source: source.replace(/^"|"$/g, '')
+					source: cleanQuotes(source)
 				};
 			});
 	} catch (error) {

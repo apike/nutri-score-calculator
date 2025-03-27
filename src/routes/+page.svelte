@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { computeFNSpoints, nutriScoreLetter } from '$lib/nutriscore-calc';
+	import { computeFNSpoints, nutriScoreLetter, nutrientsFromFood } from '$lib/nutriscore-calc';
 	import type { NutrientsPer100g } from '$lib/nutriscore-calc';
 	import { convertToNutrientsPer100g } from '$lib/canadian-nutrition';
 	import type { ServingNutrients } from '$lib/canadian-nutrition';
@@ -10,6 +10,19 @@
 	onMount(async () => {
 		foods = await loadFoods();
 	});
+
+	// Calculate Nutri-Score for each food
+	let foodScores = $derived(
+		foods.map((food) => {
+			const nutrients = nutrientsFromFood(food);
+			const score = computeFNSpoints(nutrients);
+			return {
+				...food,
+				nutriScore: nutriScoreLetter(score),
+				fnsScore: score
+			};
+		})
+	);
 
 	let servingData: ServingNutrients = $state({
 		servingSize: {
@@ -42,25 +55,27 @@
 					<th>Note</th>
 					<th>Serving (g)</th>
 					<th>Calories</th>
-					<th>Fat (g)</th>
+					<th>Saturated Fat (g)</th>
 					<th>Sodium (mg)</th>
 					<th>Fibre (g)</th>
 					<th>Sugar (g)</th>
 					<th>Protein (g)</th>
+					<th>Nutri-Score</th>
 				</tr>
 			</thead>
 			<tbody>
-				{#each foods as food}
+				{#each foodScores as food}
 					<tr>
 						<td>{food.name}</td>
 						<td class="max-w-xs">{food.allenNote}</td>
 						<td>{food.servingG}</td>
 						<td>{food.calories}</td>
-						<td>{food.fatG}</td>
+						<td>{food.saturatedFatG}</td>
 						<td>{food.sodiumMg}</td>
 						<td>{food.fibreG}</td>
 						<td>{food.totalSugarG}</td>
 						<td>{food.proteinG}</td>
+						<td class="font-bold">{food.nutriScore} ({food.fnsScore})</td>
 					</tr>
 				{/each}
 			</tbody>

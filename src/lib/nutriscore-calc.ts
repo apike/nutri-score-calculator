@@ -1,8 +1,10 @@
 /**
  * nutriscore-calc.ts
  *
- * An implementation of the 2022 “main foods” Nutri-Score calculation.
+ * An implementation of the 2022 "main foods" Nutri-Score calculation.
  */
+
+import type { Food } from './foodLoader';
 
 export interface NutrientsPer100g {
 	energyKJ: number;
@@ -17,7 +19,7 @@ export interface NutrientsPer100g {
 
 /**
  * Returns how many thresholds the given value exceeds.
- * If value > thresholds[i], that’s (i+1) points.
+ * If value > thresholds[i], that's (i+1) points.
  */
 function calculatePoints(value: number, thresholds: number[]): number {
 	let pts = 0;
@@ -81,7 +83,7 @@ function pointsForFruitVeg(percent: number): number {
 }
 
 /**
- * Computes the numeric FNS (“Final Nutritional Score”) points for a “main” food.
+ * Computes the numeric FNS ("Final Nutritional Score") points for a "main" food.
  * If A ≥ 11 and not cheese, omit protein points. Otherwise, subtract all C-points.
  */
 export function computeFNSpoints(data: NutrientsPer100g): number {
@@ -110,4 +112,23 @@ export function nutriScoreLetter(score: number): string {
 	if (score <= 10) return 'C';
 	if (score <= 18) return 'D';
 	return 'E';
+}
+
+/**
+ * Converts a Food object to NutrientsPer100g, normalizing to 100g portion
+ * and converting units as needed.
+ */
+export function nutrientsFromFood(food: Food): NutrientsPer100g {
+	const scaleFactor = 100 / food.servingG;
+
+	return {
+		energyKJ: food.calories * 4.184 * scaleFactor,
+		saturatesG: food.saturatedFatG * scaleFactor,
+		sugarsG: food.totalSugarG * scaleFactor,
+		saltG: (food.sodiumMg * scaleFactor) / 1000, // Convert mg to g
+		proteinG: food.proteinG * scaleFactor,
+		fibreG: food.fibreG * scaleFactor,
+		fruitVegPercent: 0, // Default to 0 since we don't have this data
+		isCheese: false // Default to false since we don't have this data
+	};
 }
