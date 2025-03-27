@@ -4,9 +4,12 @@
 	import { convertToNutrientsPer100g } from '$lib/canadian-nutrition';
 	import type { ServingNutrients } from '$lib/canadian-nutrition';
 	import { loadFoods, type Food } from '$lib/foodLoader';
+	import { onMount } from 'svelte';
 
 	let foods: Food[] = $state([]);
-	loadFoods().then((data) => (foods = data));
+	onMount(async () => {
+		foods = await loadFoods();
+	});
 
 	let servingData: ServingNutrients = $state({
 		servingSize: {
