@@ -1,35 +1,57 @@
 <script lang="ts">
 	import { computeFNSpoints, nutriScoreLetter } from '$lib/nutriscore-calc';
 	import type { NutrientsPer100g } from '$lib/nutriscore-calc';
+	import { convertToNutrientsPer100g } from '$lib/canadian-nutrition';
+	import type { ServingNutrients } from '$lib/canadian-nutrition';
 
-	let sampleData: NutrientsPer100g = $state({
-		energyKJ: 1200,
-		saturatesG: 3.5,
-		sugarsG: 12,
-		saltG: 1.2,
-		proteinG: 8,
-		fibreG: 4,
-		fruitVegPercent: 60
+	let servingData: ServingNutrients = $state({
+		servingSize: {
+			amount: 30,
+			unit: 'g'
+		},
+		calories: 150,
+		saturatedFat: 3,
+		totalSugars: 6,
+		sodium: 240,
+		protein: 4,
+		dietaryFiber: 2,
+		fruitVegPercent: 0
 	});
 
-	let numericScore = $derived(computeFNSpoints(sampleData));
-	let nutriScore = $derived(nutriScoreLetter(numericScore));
+	let convertedData = $derived(convertToNutrientsPer100g(servingData));
+	let convertedScore = $derived(computeFNSpoints(convertedData));
+	let convertedNutriScore = $derived(nutriScoreLetter(convertedScore));
 </script>
 
 <h1 class="text-3xl font-bold">Nutri-Score Calculator</h1>
-<p class="pt-4 text-lg">Sample calculation:</p>
 
-<div class="bg-base-200 mt-4 rounded-lg p-4">
-	<p>Energy: {sampleData.energyKJ} kJ</p>
-	<p>Saturates: {sampleData.saturatesG}g</p>
-	<p>Sugars: {sampleData.sugarsG}g</p>
-	<p>Salt: {sampleData.saltG}g</p>
-	<p>Protein: {sampleData.proteinG}g</p>
-	<p>Fibre: {sampleData.fibreG}g</p>
-	<p>Fruit/Veg: {sampleData.fruitVegPercent}%</p>
-</div>
-
-<div class="mt-4">
-	<p class="text-xl">Numeric Score: {numericScore}</p>
-	<p class="text-2xl font-bold">Nutri-Score: {nutriScore}</p>
+<div class="mt-8">
+	<h2 class="mb-4 text-2xl font-semibold">Nutrition Label Input</h2>
+	<div class="bg-base-200 rounded-lg p-4">
+		<p>Serving Size: {servingData.servingSize.amount}{servingData.servingSize.unit}</p>
+		<p>Calories: {servingData.calories}</p>
+		<p>Saturated Fat: {servingData.saturatedFat}g</p>
+		<p>Sugars: {servingData.totalSugars}g</p>
+		<p>Sodium: {servingData.sodium}mg</p>
+		<p>Protein: {servingData.protein}g</p>
+		<p>Dietary Fiber: {servingData.dietaryFiber}g</p>
+		{#if servingData.fruitVegPercent !== undefined}
+			<p>Fruit/Veg: {servingData.fruitVegPercent}%</p>
+		{/if}
+	</div>
+	<div class="mt-4">
+		<h3 class="mb-2 text-xl font-semibold">Converted to 100g:</h3>
+		<div class="bg-base-300 rounded-lg p-4">
+			<p>Energy: {convertedData.energyKJ.toFixed(1)} kJ</p>
+			<p>Saturates: {convertedData.saturatesG.toFixed(1)}g</p>
+			<p>Sugars: {convertedData.sugarsG.toFixed(1)}g</p>
+			<p>Salt: {convertedData.saltG.toFixed(1)}g</p>
+			<p>Protein: {convertedData.proteinG.toFixed(1)}g</p>
+			<p>Fibre: {convertedData.fibreG.toFixed(1)}g</p>
+		</div>
+		<div class="mt-4">
+			<p class="text-xl">Numeric Score: {convertedScore}</p>
+			<p class="text-2xl font-bold">Nutri-Score: {convertedNutriScore}</p>
+		</div>
+	</div>
 </div>

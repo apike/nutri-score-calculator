@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Project Architecture
+
+- This project uses Svelte 5 and SvelteKit 2 and runs as an SPA
+  - This means no React in this project
+- CSS is built with TailwindCSS 4 and DaisyUI 5
+- Keep things simple, always ask before proposing a new npm package
