@@ -11,6 +11,9 @@
 
 	export let onClose: () => void = () => {};
 
+	// Toggle for display mode: true = normalized to 50g, false = original serving
+	let showNormalized = true;
+
 	// Calculate nutrients for the selected food for detail view
 	$: selectedFoodNutrients = selectedFood ? nutrientsFromFood(selectedFood) : null;
 
@@ -95,7 +98,9 @@
 				<h3 class="border-b pb-1 text-lg font-semibold">Nutritional Information</h3>
 				<div class="mt-3">
 					<p class="text-base-content/70 text-sm">
-						Values per 50g (original {selectedFood.servingG}g serving in parentheses)
+						Values {showNormalized
+							? `per 50g (normalized)`
+							: `per ${selectedFood.servingG}g (original serving)`}
 					</p>
 
 					<div class="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -103,13 +108,12 @@
 						<div class="card bg-base-200 p-3">
 							<h4 class="font-medium">Calories</h4>
 							<div class="flex items-baseline">
-								<span class="text-xl font-bold"
-									>{Math.round((selectedFood.calories * 50) / selectedFood.servingG)}</span
-								>
+								<span class="text-xl font-bold">
+									{showNormalized
+										? Math.round((selectedFood.calories * 50) / selectedFood.servingG)
+										: selectedFood.calories}
+								</span>
 								<span class="ml-1 text-xs">kcal</span>
-								<span class="ml-2 text-xs opacity-70"
-									>({selectedFood.calories} in {selectedFood.servingG}g)</span
-								>
 							</div>
 						</div>
 
@@ -117,13 +121,12 @@
 						<div class="card bg-base-200 p-3">
 							<h4 class="font-medium">Saturated Fat</h4>
 							<div class="flex items-baseline">
-								<span class="text-xl font-bold"
-									>{((selectedFood.saturatedFatG * 50) / selectedFood.servingG).toFixed(1)}</span
-								>
+								<span class="text-xl font-bold">
+									{showNormalized
+										? ((selectedFood.saturatedFatG * 50) / selectedFood.servingG).toFixed(1)
+										: selectedFood.saturatedFatG.toFixed(1)}
+								</span>
 								<span class="ml-1 text-xs">g</span>
-								<span class="ml-2 text-xs opacity-70"
-									>({selectedFood.saturatedFatG.toFixed(1)}g in {selectedFood.servingG}g)</span
-								>
 							</div>
 						</div>
 
@@ -131,13 +134,12 @@
 						<div class="card bg-base-200 p-3">
 							<h4 class="font-medium">Sugar</h4>
 							<div class="flex items-baseline">
-								<span class="text-xl font-bold"
-									>{((selectedFood.totalSugarG * 50) / selectedFood.servingG).toFixed(1)}</span
-								>
+								<span class="text-xl font-bold">
+									{showNormalized
+										? ((selectedFood.totalSugarG * 50) / selectedFood.servingG).toFixed(1)
+										: selectedFood.totalSugarG.toFixed(1)}
+								</span>
 								<span class="ml-1 text-xs">g</span>
-								<span class="ml-2 text-xs opacity-70"
-									>({selectedFood.totalSugarG.toFixed(1)}g in {selectedFood.servingG}g)</span
-								>
 							</div>
 						</div>
 
@@ -145,13 +147,12 @@
 						<div class="card bg-base-200 p-3">
 							<h4 class="font-medium">Sodium</h4>
 							<div class="flex items-baseline">
-								<span class="text-xl font-bold"
-									>{Math.round((selectedFood.sodiumMg * 50) / selectedFood.servingG)}</span
-								>
+								<span class="text-xl font-bold">
+									{showNormalized
+										? Math.round((selectedFood.sodiumMg * 50) / selectedFood.servingG)
+										: selectedFood.sodiumMg}
+								</span>
 								<span class="ml-1 text-xs">mg</span>
-								<span class="ml-2 text-xs opacity-70"
-									>({selectedFood.sodiumMg}mg in {selectedFood.servingG}g)</span
-								>
 							</div>
 						</div>
 
@@ -159,13 +160,12 @@
 						<div class="card bg-base-200 p-3">
 							<h4 class="font-medium">Protein</h4>
 							<div class="flex items-baseline">
-								<span class="text-xl font-bold"
-									>{((selectedFood.proteinG * 50) / selectedFood.servingG).toFixed(1)}</span
-								>
+								<span class="text-xl font-bold">
+									{showNormalized
+										? ((selectedFood.proteinG * 50) / selectedFood.servingG).toFixed(1)
+										: selectedFood.proteinG.toFixed(1)}
+								</span>
 								<span class="ml-1 text-xs">g</span>
-								<span class="ml-2 text-xs opacity-70"
-									>({selectedFood.proteinG.toFixed(1)}g in {selectedFood.servingG}g)</span
-								>
 							</div>
 						</div>
 
@@ -173,13 +173,12 @@
 						<div class="card bg-base-200 p-3">
 							<h4 class="font-medium">Fibre</h4>
 							<div class="flex items-baseline">
-								<span class="text-xl font-bold"
-									>{((selectedFood.fibreG * 50) / selectedFood.servingG).toFixed(1)}</span
-								>
+								<span class="text-xl font-bold">
+									{showNormalized
+										? ((selectedFood.fibreG * 50) / selectedFood.servingG).toFixed(1)
+										: selectedFood.fibreG.toFixed(1)}
+								</span>
 								<span class="ml-1 text-xs">g</span>
-								<span class="ml-2 text-xs opacity-70"
-									>({selectedFood.fibreG.toFixed(1)}g in {selectedFood.servingG}g)</span
-								>
 							</div>
 						</div>
 
@@ -197,19 +196,38 @@
 				</div>
 			</div>
 
-			<!-- Source link - positioned at bottom right -->
-			<div class="mt-6 flex justify-end">
-				<span class="text-sm opacity-70">Source: </span>
-				<a
-					href={selectedFood.source.startsWith('http')
-						? selectedFood.source
-						: `https://${selectedFood.source}`}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="text-primary text-sm hover:underline"
-				>
-					{extractDomain(selectedFood.source)}
-				</a>
+			<!-- Bottom section with toggle on left and source link on right -->
+			<div class="mt-6 flex items-center justify-between">
+				<!-- Toggle switch for display mode -->
+				<div class="form-control">
+					<label class="label cursor-pointer gap-2">
+						<span class="label-text text-sm">Show per:</span>
+						<div class="flex items-center gap-1">
+							<span class="text-xs">{selectedFood.servingG}g</span>
+							<input
+								type="checkbox"
+								class="toggle toggle-primary toggle-sm"
+								bind:checked={showNormalized}
+							/>
+							<span class="text-xs">50g</span>
+						</div>
+					</label>
+				</div>
+
+				<!-- Source link -->
+				<div class="flex">
+					<span class="text-sm opacity-70">Source: </span>
+					<a
+						href={selectedFood.source.startsWith('http')
+							? selectedFood.source
+							: `https://${selectedFood.source}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-primary text-sm hover:underline"
+					>
+						{extractDomain(selectedFood.source)}
+					</a>
+				</div>
 			</div>
 		</div>
 	{:else}
