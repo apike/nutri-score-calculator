@@ -84,30 +84,15 @@
 
 			<!-- Nutri-Score Card -->
 			<div class="card bg-base-200 mt-4 p-4 shadow-sm">
-				<div class="flex items-center">
-					<div class="mr-4 flex-none">
-						<h3 class="text-base font-semibold">Nutri-Score</h3>
-						<div class="mt-1 flex items-baseline">
-							<span
-								class="rounded px-2 text-4xl font-bold"
-								style="background-color: {selectedFood
-									? nutriScoreColor(selectedFood.nutriScore)
-									: '#777777'}; 
-									   color: {selectedFood ? nutriScoreTextColor(selectedFood.nutriScore) : '#ffffff'}"
-							>
-								{selectedFood?.nutriScore || '?'}
-							</span>
-							<span class="ml-2 text-sm opacity-70"
-								>({selectedFood?.fnsScoreWithProtein} points)</span
-							>
-						</div>
-					</div>
+				<div>
+					<h3 class="text-base font-semibold">Nutri-Score</h3>
 
-					<div class="flex-1">
-						<div class="flex w-full">
+					<div class="relative mt-3 pb-2">
+						<!-- Nutri-score legend -->
+						<div class="flex w-full" id="nutri-score-legend">
 							{#each ['A', 'B', 'C', 'D', 'E'] as letter}
 								<div
-									class="flex h-6 flex-1 items-center justify-center text-xs font-bold"
+									class="text-s flex h-6 flex-1 items-center justify-center py-4 font-bold"
 									style="background-color: {nutriScoreColor(letter)}; 
 										   color: {nutriScoreTextColor(letter)}; 
 										   {selectedFood?.nutriScore !== letter ? 'opacity: 0.6;' : ''}"
@@ -116,9 +101,33 @@
 								</div>
 							{/each}
 						</div>
-						<p class="mt-1 text-xs opacity-70">Better ← → Worse</p>
+
+						<!-- Big letter positioned over the legend -->
+						{#if selectedFood}
+							<div
+								class="pointer-events-none absolute top-0 left-0 flex h-full w-full items-center"
+							>
+								<div
+									class="absolute -translate-y-1/2 transform"
+									style="left: {['A', 'B', 'C', 'D', 'E'].indexOf(selectedFood.nutriScore) * 20 +
+										10}%; transform: translateX(-50%) translateY(50%);"
+								>
+									<span
+										class="rounded-xl px-3 py-1 text-5xl font-bold shadow-md"
+										id="big-letter"
+										style="background-color: {nutriScoreColor(selectedFood.nutriScore)}; 
+											   color: {nutriScoreTextColor(selectedFood.nutriScore)}"
+									>
+										{selectedFood.nutriScore}
+									</span>
+								</div>
+							</div>
+						{/if}
 					</div>
 				</div>
+			</div>
+			<div class="mt-2">
+				<span class="text-sm opacity-70">Score: {selectedFood?.fnsScoreWithProtein} points</span>
 			</div>
 
 			<!-- Nutritional Information -->
