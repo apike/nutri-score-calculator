@@ -23,11 +23,16 @@
 	);
 </script>
 
-<h1 class="text-3xl font-bold">Nutri-Score Calculator</h1>
+<!-- Main container - fixed viewport height with overflow hidden -->
+<div class="flex h-screen flex-col overflow-hidden p-8">
+	<!-- Header section - takes natural height -->
+	<div class="p-4">
+		<h1 class="text-3xl font-bold">Nutri-Score Calculator</h1>
+		<h2 class="mt-4 text-2xl font-semibold">Food Database</h2>
+	</div>
 
-<div class="mt-8">
-	<h2 class="mb-4 text-2xl font-semibold">Food Database</h2>
-	<div class="relative max-h-[600px] overflow-x-auto">
+	<!-- Table section - fills ALL remaining space -->
+	<div class="flex-1 overflow-auto">
 		<table class="table-zebra table w-full">
 			<thead class="bg-base-100 sticky top-0 z-10">
 				<tr>
