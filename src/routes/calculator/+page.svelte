@@ -114,27 +114,36 @@
 		<div class="mb-4 flex items-center justify-between">
 			<!-- Category Filter Tabs -->
 			<div role="tablist" class="tabs tabs-border">
-				<a
+				<button
 					role="tab"
+					tabindex="0"
 					class="tab {selectedCategory === 'all' ? 'tab-active' : ''}"
 					onclick={() => (selectedCategory = 'all')}
+					onkeydown={(e) => e.key === 'Enter' && (selectedCategory = 'all')}
+					aria-selected={selectedCategory === 'all'}
 				>
-					All Foods
-				</a>
-				<a
+					All
+				</button>
+				<button
 					role="tab"
+					tabindex="0"
 					class="tab {selectedCategory === 'cereal' ? 'tab-active' : ''}"
 					onclick={() => (selectedCategory = 'cereal')}
+					onkeydown={(e) => e.key === 'Enter' && (selectedCategory = 'cereal')}
+					aria-selected={selectedCategory === 'cereal'}
 				>
 					Cereals
-				</a>
-				<a
+				</button>
+				<button
 					role="tab"
+					tabindex="0"
 					class="tab {selectedCategory === 'snack' ? 'tab-active' : ''}"
 					onclick={() => (selectedCategory = 'snack')}
+					onkeydown={(e) => e.key === 'Enter' && (selectedCategory = 'snack')}
+					aria-selected={selectedCategory === 'snack'}
 				>
 					Snacks
-				</a>
+				</button>
 			</div>
 
 			<!-- Add Food button -->
