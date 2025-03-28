@@ -17,6 +17,21 @@ export interface NutrientsPer100g {
 	isCheese?: boolean;
 }
 
+export interface NutrientPoints {
+	// Individual component points - negative for unfavorable, positive for favorable
+	energy: number;
+	saturates: number;
+	sugars: number;
+	salt: number;
+	protein: number;
+	fibre: number;
+	fruitVeg: number;
+	// Total scores
+	aPoints: number; // Total unfavorable points (positive value)
+	cPoints: number; // Total favorable points (positive value)
+	fnsScore: number; // Final score
+}
+
 /**
  * Returns how many thresholds the given value exceeds.
  * If value > thresholds[i], that's (i+1) points.
@@ -83,24 +98,58 @@ function pointsForFruitVeg(percent: number): number {
 }
 
 /**
+ * Calculates component nutrient points and returns a detailed breakdown
+ */
+export function calculateNutrientPoints(data: NutrientsPer100g): NutrientPoints {
+	// Calculate individual components
+	const energyPoints = pointsForEnergy(data.energyKJ);
+	const saturatesPoints = pointsForSaturates(data.saturatesG);
+	const sugarsPoints = pointsForSugars(data.sugarsG);
+	const saltPoints = pointsForSalt(data.saltG);
+
+	const proteinPoints = pointsForProtein(data.proteinG);
+	const fibrePoints = pointsForFibre(data.fibreG);
+	const fruitVegPoints = pointsForFruitVeg(data.fruitVegPercent);
+
+	// Calculate total A and C points (keeping these as positive for calculation purposes)
+	const aPoints = energyPoints + saturatesPoints + sugarsPoints + saltPoints;
+
+	// Apply special protein rule
+	let cPoints;
+	let fnsScore;
+
+	if (aPoints >= 11 && !data.isCheese) {
+		// Exclude protein points if A ≥ 11 and not cheese
+		cPoints = fibrePoints + fruitVegPoints;
+		fnsScore = aPoints - cPoints;
+	} else {
+		cPoints = proteinPoints + fibrePoints + fruitVegPoints;
+		fnsScore = aPoints - cPoints;
+	}
+
+	return {
+		// Return unfavorable points as negative values
+		energy: -energyPoints,
+		saturates: -saturatesPoints,
+		sugars: -sugarsPoints,
+		salt: -saltPoints,
+		// Return favorable points as positive
+		protein: proteinPoints,
+		fibre: fibrePoints,
+		fruitVeg: fruitVegPoints,
+		// Keep original scoring values as positive for clarity
+		aPoints,
+		cPoints,
+		fnsScore
+	};
+}
+
+/**
  * Computes the numeric FNS ("Final Nutritional Score") points for a "main" food.
  * If A ≥ 11 and not cheese, omit protein points. Otherwise, subtract all C-points.
  */
 export function computeFNSpoints(data: NutrientsPer100g): number {
-	const A =
-		pointsForEnergy(data.energyKJ) +
-		pointsForSugars(data.sugarsG) +
-		pointsForSaturates(data.saturatesG) +
-		pointsForSalt(data.saltG);
-
-	const cProtein = pointsForProtein(data.proteinG);
-	const cFibre = pointsForFibre(data.fibreG);
-	const cFruitVeg = pointsForFruitVeg(data.fruitVegPercent);
-
-	if (A >= 11 && !data.isCheese) {
-		return A - (cFibre + cFruitVeg);
-	}
-	return A - (cProtein + cFibre + cFruitVeg);
+	return calculateNutrientPoints(data).fnsScore;
 }
 
 /**
