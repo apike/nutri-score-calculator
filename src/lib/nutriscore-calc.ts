@@ -128,7 +128,7 @@ export function nutrientsFromFood(food: Food): NutrientsPer100g {
 		saltG: (food.sodiumMg * scaleFactor) / 1000, // Convert mg to g
 		proteinG: food.proteinG * scaleFactor,
 		fibreG: food.fibreG * scaleFactor,
-		fruitVegPercent: 0, // Default to 0 since we don't have this data
+		fruitVegPercent: food.fruitVegPercent ?? 0,
 		isCheese: false // Default to false since we don't have this data
 	};
 }

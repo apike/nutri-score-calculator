@@ -1,6 +1,7 @@
 export interface Food {
 	name: string;
 	allenNote: string;
+	source: string;
 	servingG: number;
 	calories: number;
 	saturatedFatG: number;
@@ -8,7 +9,7 @@ export interface Food {
 	fibreG: number;
 	totalSugarG: number;
 	proteinG: number;
-	source: string;
+	fruitVegPercent?: number; // Optional as it's not typically on labels
 }
 
 // Helper function to clean quotes from CSV fields
@@ -85,14 +86,14 @@ export async function loadFoods(): Promise<Food[]> {
 				return {
 					name: cleanQuotes(name),
 					allenNote: cleanQuotes(allenNote),
+					source: cleanQuotes(source),
 					servingG: parseNumber(servingG),
 					calories: parseNumber(calories),
 					saturatedFatG: parseNumber(fatG) * 0.1, // Estimate saturated fat as 10% of total fat, spreadsheet needs updated
 					sodiumMg: parseNumber(sodiumMg),
 					fibreG: parseNumber(fibreG),
 					totalSugarG: parseNumber(totalSugarG),
-					proteinG: parseNumber(proteinG),
-					source: cleanQuotes(source)
+					proteinG: parseNumber(proteinG)
 				};
 			});
 	} catch (error) {
