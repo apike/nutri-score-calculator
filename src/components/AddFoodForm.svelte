@@ -10,7 +10,7 @@
 	let nameInput: HTMLInputElement;
 
 	// Form field values
-	let foodName = `Comparison Food ${foodCount + 1}`;
+	let foodName = foodCount === 0 ? 'Comparison Food' : `Comparison Food ${foodCount + 1}`;
 	let allenNote = '';
 	let source = '';
 	let servingG = '';
@@ -75,6 +75,7 @@
 				bind:value={foodName}
 				bind:this={nameInput}
 				required
+				autocomplete="off"
 			/>
 		</div>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { computeFNSpoints, nutriScoreLetter, nutrientsFromFood } from '$lib/nutriscore-calc';
 	import type { NutrientsPer100g } from '$lib/nutriscore-calc';
-	import { loadFoods, addNewFood, type Food } from '$lib/foodLoader';
+	import { loadFoods, addNewFood, getUserAddedFoodsCount, type Food } from '$lib/foodLoader';
 	import { onMount } from 'svelte';
 	import FoodDetail from '../components/FoodDetail.svelte';
 	import AddFoodForm from '../components/AddFoodForm.svelte';
@@ -45,12 +45,11 @@
 		<!-- Header section -->
 		<div class="mb-4">
 			<h1 class="text-3xl font-bold">Nutri-Score Calculator</h1>
-			<h2 class="mt-4 text-2xl font-semibold">Food Database</h2>
 		</div>
 
 		<!-- Add Food button -->
 		<button
-			class="btn btn-primary mb-4 w-full md:max-w-[200px]"
+			class="btn btn-primary mb-4 ml-auto w-full md:max-w-[200px]"
 			onclick={() => {
 				selectedFood = null;
 				addingFood = true;
@@ -98,7 +97,11 @@
 		<div
 			class="bg-base-100 fixed inset-0 z-20 transition-all duration-300 md:static md:z-auto md:w-1/2 md:border-l"
 		>
-			<AddFoodForm onClose={() => (addingFood = false)} onSave={addFood} foodCount={foods.length} />
+			<AddFoodForm
+				onClose={() => (addingFood = false)}
+				onSave={addFood}
+				foodCount={getUserAddedFoodsCount()}
+			/>
 		</div>
 	{:else}
 		<FoodDetail {selectedFood} onClose={() => (selectedFood = null)} />

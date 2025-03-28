@@ -112,3 +112,8 @@ export async function loadFoods(): Promise<Food[]> {
 export function addNewFood(food: Food): void {
 	userAddedFoods = [food, ...userAddedFoods];
 }
+
+// Function to get the count of user-added foods
+export function getUserAddedFoodsCount(): number {
+	return userAddedFoods.length;
+}
