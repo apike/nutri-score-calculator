@@ -145,7 +145,7 @@
 					addingFood = true;
 				}}
 			>
-				<span class="mr-1">+</span> Add New Food
+				<span class="mr-1">+</span> Add Food
 			</button>
 		</div>
 
