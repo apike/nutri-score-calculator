@@ -12,6 +12,9 @@ export interface Food {
 	fruitVegPercent?: number; // Optional as it's not typically on labels
 }
 
+// In-memory array to hold user-added foods
+let userAddedFoods: Food[] = [];
+
 // Helper function to clean quotes from CSV fields
 function cleanQuotes(value: string): string {
 	return value.replace(/^"|"$/g, '');
@@ -22,14 +25,14 @@ export async function loadFoods(): Promise<Food[]> {
 		const response = await fetch('/cereals.csv');
 		if (!response.ok) {
 			console.error('Failed to fetch CSV:', response.status, response.statusText);
-			return [];
+			return [...userAddedFoods];
 		}
 		const text = await response.text();
 
 		// Skip header row and parse each line
 		const lines = text.split('\n').slice(1);
 
-		return lines
+		const csvFoods = lines
 			.filter((line) => line.trim()) // Skip empty lines
 			.map((line) => {
 				// Parse CSV line, handling quoted fields
@@ -96,8 +99,16 @@ export async function loadFoods(): Promise<Food[]> {
 					proteinG: parseNumber(proteinG)
 				};
 			});
+
+		// Combine user-added foods with foods from CSV
+		return [...userAddedFoods, ...csvFoods];
 	} catch (error) {
 		console.error('Error loading foods:', error);
-		return [];
+		return [...userAddedFoods];
 	}
+}
+
+// Function to add a new food to the in-memory array
+export function addNewFood(food: Food): void {
+	userAddedFoods = [food, ...userAddedFoods];
 }

@@ -47,7 +47,6 @@
 		<div class="mt-8 md:mt-0">
 			<h2 class="text-2xl font-bold">{selectedFood.name}</h2>
 
-			<!-- Notes only (Source moved to bottom) -->
 			<div class="mt-3">
 				{#if selectedFood.allenNote}
 					<p class="mt-2 italic">{selectedFood.allenNote}</p>

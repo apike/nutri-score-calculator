@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { computeFNSpoints, nutriScoreLetter, nutrientsFromFood } from '$lib/nutriscore-calc';
 	import type { NutrientsPer100g } from '$lib/nutriscore-calc';
-	import { loadFoods, type Food } from '$lib/foodLoader';
+	import { loadFoods, addNewFood, type Food } from '$lib/foodLoader';
 	import { onMount } from 'svelte';
 	import FoodDetail from '../components/FoodDetail.svelte';
+	import AddFoodForm from '../components/AddFoodForm.svelte';
 
 	let foods: Food[] = $state([]);
 	onMount(async () => {
@@ -25,6 +26,16 @@
 
 	// Track selected food for detail view
 	let selectedFood: (typeof foodScores)[number] | null = $state(null);
+
+	// Track if we're in add food mode
+	let addingFood = $state(false);
+
+	// Function to add a new food to the list
+	function addFood(newFood: Food) {
+		addNewFood(newFood);
+		foods = [newFood, ...foods];
+		addingFood = false;
+	}
 </script>
 
 <!-- Main container - fixed viewport height with overflow hidden -->
@@ -48,11 +59,28 @@
 					</tr>
 				</thead>
 				<tbody>
+					<!-- Add Food row -->
+					<tr
+						class="bg-base-200 cursor-pointer"
+						on:click={() => {
+							selectedFood = null;
+							addingFood = true;
+						}}
+					>
+						<td class="text-primary font-medium">
+							<span class="text-primary">+</span> Add New Food
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+
 					{#each foodScores as food}
 						<tr
-							class="hover:bg-base-200 cursor-pointer"
-							on:click={() => (selectedFood = food)}
-							class:active={selectedFood && food.name === selectedFood.name}
+							class="cursor-pointer"
+							on:click={() => {
+								selectedFood = food;
+								addingFood = false;
+							}}
 						>
 							<td>
 								{#if selectedFood && food.name === selectedFood.name}
@@ -69,6 +97,14 @@
 		</div>
 	</div>
 
-	<!-- Food detail component -->
-	<FoodDetail {selectedFood} onClose={() => (selectedFood = null)} />
+	<!-- Food detail or add food form -->
+	{#if addingFood}
+		<div
+			class="bg-base-100 fixed inset-0 z-20 transition-all duration-300 md:static md:z-auto md:w-1/2 md:border-l"
+		>
+			<AddFoodForm onClose={() => (addingFood = false)} onSave={addFood} />
+		</div>
+	{:else}
+		<FoodDetail {selectedFood} onClose={() => (selectedFood = null)} />
+	{/if}
 </div>
