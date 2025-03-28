@@ -9,20 +9,18 @@
 	// Input reference for auto-selection
 	let nameInput: HTMLInputElement;
 
-	// Initial empty food state
-	let newFood: Food = {
-		name: `Comparison Food ${foodCount + 1}`,
-		allenNote: '',
-		source: '',
-		servingG: 100,
-		calories: 0,
-		saturatedFatG: 0,
-		sodiumMg: 0,
-		fibreG: 0,
-		totalSugarG: 0,
-		proteinG: 0,
-		fruitVegPercent: 0
-	};
+	// Form field values
+	let foodName = `Comparison Food ${foodCount + 1}`;
+	let allenNote = '';
+	let source = '';
+	let servingG = '';
+	let calories = '';
+	let saturatedFatG = 0;
+	let sodiumMg = 0;
+	let fibreG = 0;
+	let totalSugarG = 0;
+	let proteinG = 0;
+	let fruitVegPercent = 0;
 
 	onMount(() => {
 		// Select the text in the name input field
@@ -33,11 +31,19 @@
 	});
 
 	function handleSubmit() {
-		// Fill in empty values for allenNote and source
+		// Create the food object with numeric conversions
 		const completeFood: Food = {
-			...newFood,
-			allenNote: newFood.allenNote || '',
-			source: newFood.source || ''
+			name: foodName,
+			allenNote: allenNote || '',
+			source: source || '',
+			servingG: Number(servingG),
+			calories: Number(calories),
+			saturatedFatG,
+			sodiumMg,
+			fibreG,
+			totalSugarG,
+			proteinG,
+			fruitVegPercent
 		};
 		onSave(completeFood);
 		onClose();
@@ -66,7 +72,7 @@
 				type="text"
 				id="name"
 				class="input input-bordered w-full"
-				bind:value={newFood.name}
+				bind:value={foodName}
 				bind:this={nameInput}
 				required
 			/>
@@ -80,7 +86,7 @@
 				type="number"
 				id="servingG"
 				class="input input-bordered w-full"
-				bind:value={newFood.servingG}
+				bind:value={servingG}
 				min="1"
 				required
 			/>
@@ -94,7 +100,7 @@
 				type="number"
 				id="calories"
 				class="input input-bordered w-full"
-				bind:value={newFood.calories}
+				bind:value={calories}
 				min="0"
 				required
 			/>
@@ -109,7 +115,7 @@
 					type="number"
 					id="saturatedFatG"
 					class="input input-bordered w-full"
-					bind:value={newFood.saturatedFatG}
+					bind:value={saturatedFatG}
 					min="0"
 					step="0.1"
 					required
@@ -124,7 +130,7 @@
 					type="number"
 					id="sodiumMg"
 					class="input input-bordered w-full"
-					bind:value={newFood.sodiumMg}
+					bind:value={sodiumMg}
 					min="0"
 					required
 				/>
@@ -138,7 +144,7 @@
 					type="number"
 					id="fibreG"
 					class="input input-bordered w-full"
-					bind:value={newFood.fibreG}
+					bind:value={fibreG}
 					min="0"
 					step="0.1"
 					required
@@ -153,7 +159,7 @@
 					type="number"
 					id="totalSugarG"
 					class="input input-bordered w-full"
-					bind:value={newFood.totalSugarG}
+					bind:value={totalSugarG}
 					min="0"
 					step="0.1"
 					required
@@ -168,7 +174,7 @@
 					type="number"
 					id="proteinG"
 					class="input input-bordered w-full"
-					bind:value={newFood.proteinG}
+					bind:value={proteinG}
 					min="0"
 					step="0.1"
 					required
@@ -183,7 +189,7 @@
 					type="number"
 					id="fruitVegPercent"
 					class="input input-bordered w-full"
-					bind:value={newFood.fruitVegPercent}
+					bind:value={fruitVegPercent}
 					min="0"
 					max="100"
 				/>

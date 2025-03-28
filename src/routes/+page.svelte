@@ -48,6 +48,17 @@
 			<h2 class="mt-4 text-2xl font-semibold">Food Database</h2>
 		</div>
 
+		<!-- Add Food button -->
+		<button
+			class="btn btn-primary mb-4 w-full md:max-w-[200px]"
+			onclick={() => {
+				selectedFood = null;
+				addingFood = true;
+			}}
+		>
+			<span class="mr-1">+</span> Add New Food
+		</button>
+
 		<!-- Table with overflow -->
 		<div class="flex-1 overflow-auto">
 			<table class="table-zebra table w-full">
@@ -59,21 +70,6 @@
 					</tr>
 				</thead>
 				<tbody>
-					<!-- Add Food row -->
-					<tr
-						class="bg-base-200 cursor-pointer"
-						onclick={() => {
-							selectedFood = null;
-							addingFood = true;
-						}}
-					>
-						<td class="text-primary font-medium">
-							<span class="text-primary">+</span> Add New Food
-						</td>
-						<td></td>
-						<td></td>
-					</tr>
-
 					{#each foodScores as food}
 						<tr
 							class="cursor-pointer"
