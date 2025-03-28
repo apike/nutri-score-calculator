@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Food } from '$lib/foodLoader';
-	import { nutrientsFromFood } from '$lib/nutriscore-calc';
+	import { nutrientsFromFood, nutriScoreColor, nutriScoreTextColor } from '$lib/nutriscore-calc';
 
 	export let selectedFood:
 		| (Food & {
@@ -13,6 +13,26 @@
 
 	// Calculate nutrients for the selected food for detail view
 	$: selectedFoodNutrients = selectedFood ? nutrientsFromFood(selectedFood) : null;
+
+	// Extract domain name from URL for display
+	function extractDomain(url: string): string {
+		// Handle URLs with or without protocol
+		try {
+			// Try to parse as full URL first
+			if (url.startsWith('http')) {
+				const domain = new URL(url).hostname;
+				return domain.startsWith('www.') ? domain.substring(4) : domain;
+			}
+
+			// For URLs without protocol
+			const parts = url.split('/');
+			const domainPart = parts[0];
+			return domainPart.startsWith('www.') ? domainPart.substring(4) : domainPart;
+		} catch (e) {
+			// If URL parsing fails, return the original
+			return url;
+		}
+	}
 </script>
 
 <div
@@ -27,9 +47,8 @@
 		<div class="mt-8 md:mt-0">
 			<h2 class="text-2xl font-bold">{selectedFood.name}</h2>
 
-			<!-- Source and Notes -->
+			<!-- Notes only (Source moved to bottom) -->
 			<div class="mt-3">
-				<p class="text-sm opacity-70">Source: {selectedFood.source}</p>
 				{#if selectedFood.allenNote}
 					<p class="mt-2 italic">{selectedFood.allenNote}</p>
 				{/if}
@@ -41,8 +60,16 @@
 					<div class="mr-4 flex-none">
 						<h3 class="text-base font-semibold">Nutri-Score</h3>
 						<div class="mt-1 flex items-baseline">
-							<span class="text-4xl font-bold">{selectedFood.nutriScore}</span>
-							<span class="ml-2 text-sm opacity-70">({selectedFood.fnsScore} points)</span>
+							<span
+								class="rounded px-2 text-4xl font-bold"
+								style="background-color: {selectedFood
+									? nutriScoreColor(selectedFood.nutriScore)
+									: '#777777'}; 
+									   color: {selectedFood ? nutriScoreTextColor(selectedFood.nutriScore) : '#ffffff'}"
+							>
+								{selectedFood?.nutriScore || '?'}
+							</span>
+							<span class="ml-2 text-sm opacity-70">({selectedFood?.fnsScore} points)</span>
 						</div>
 					</div>
 
@@ -50,7 +77,10 @@
 						<div class="flex w-full">
 							{#each ['A', 'B', 'C', 'D', 'E'] as letter}
 								<div
-									class={`flex h-6 flex-1 items-center justify-center text-xs font-bold ${selectedFood.nutriScore === letter ? 'bg-primary text-primary-content' : 'bg-base-300'}`}
+									class="flex h-6 flex-1 items-center justify-center text-xs font-bold"
+									style="background-color: {nutriScoreColor(letter)}; 
+										   color: {nutriScoreTextColor(letter)}; 
+										   {selectedFood?.nutriScore !== letter ? 'opacity: 0.6;' : ''}"
 								>
 									{letter}
 								</div>
@@ -154,17 +184,33 @@
 							</div>
 						</div>
 
-						{#if selectedFood.fruitVegPercent !== undefined}
-							<!-- Fruit/Veg Percentage -->
-							<div class="card bg-base-200 p-3">
-								<h4 class="font-medium">Fruit/Veg Content</h4>
-								<div class="flex items-baseline">
-									<span class="text-xl font-bold">{selectedFood.fruitVegPercent}%</span>
-								</div>
+						<!-- Fruit/Veg Percentage -->
+						<div class="card bg-base-200 p-3">
+							<h4 class="font-medium">Fruit & Veg %</h4>
+							<div class="flex items-baseline">
+								<span class="text-xl font-bold">{selectedFood.fruitVegPercent ?? 0}%</span>
+								{#if selectedFood.fruitVegPercent}
+									<span class="ml-2 text-xs opacity-70">(counts toward favorable score)</span>
+								{/if}
 							</div>
-						{/if}
+						</div>
 					</div>
 				</div>
+			</div>
+
+			<!-- Source link - positioned at bottom right -->
+			<div class="mt-6 flex justify-end">
+				<span class="text-sm opacity-70">Source: </span>
+				<a
+					href={selectedFood.source.startsWith('http')
+						? selectedFood.source
+						: `https://${selectedFood.source}`}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-primary text-sm hover:underline"
+				>
+					{extractDomain(selectedFood.source)}
+				</a>
 			</div>
 		</div>
 	{:else}

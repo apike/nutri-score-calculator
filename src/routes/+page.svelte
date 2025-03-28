@@ -52,9 +52,14 @@
 						<tr
 							class="hover:bg-base-200 cursor-pointer"
 							on:click={() => (selectedFood = food)}
-							class:bg-base-300={selectedFood && food.name === selectedFood.name}
+							class:active={selectedFood && food.name === selectedFood.name}
 						>
-							<td>{food.name}</td>
+							<td>
+								{#if selectedFood && food.name === selectedFood.name}
+									<span class="text-primary">►</span>
+								{/if}
+								{food.name}
+							</td>
 							<td class="max-w-xs">{food.allenNote}</td>
 							<td class="font-bold">{food.nutriScore} ({food.fnsScore})</td>
 						</tr>

@@ -115,6 +115,34 @@ export function nutriScoreLetter(score: number): string {
 }
 
 /**
+ * Returns the standard color for a Nutri-Score letter.
+ */
+export function nutriScoreColor(letter: string): string {
+	switch (letter) {
+		case 'A':
+			return '#038141'; // Dark green
+		case 'B':
+			return '#85bb2f'; // Light green
+		case 'C':
+			return '#fecb02'; // Yellow
+		case 'D':
+			return '#ee8100'; // Orange
+		case 'E':
+			return '#e63e11'; // Red
+		default:
+			return '#777777'; // Gray for unknown
+	}
+}
+
+/**
+ * Returns the standard text color for a Nutri-Score letter (for contrast).
+ */
+export function nutriScoreTextColor(letter: string): string {
+	// Dark text for light backgrounds (B, C), white for others
+	return letter === 'B' || letter === 'C' ? '#333333' : '#ffffff';
+}
+
+/**
  * Converts a Food object to NutrientsPer100g, normalizing to 100g portion
  * and converting units as needed.
  */
