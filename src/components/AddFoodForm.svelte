@@ -1,12 +1,17 @@
 <script lang="ts">
 	import type { Food } from '$lib/foodLoader';
+	import { onMount } from 'svelte';
 
 	export let onClose: () => void = () => {};
 	export let onSave: (food: Food) => void = () => {};
+	export let foodCount: number = 0;
+
+	// Input reference for auto-selection
+	let nameInput: HTMLInputElement;
 
 	// Initial empty food state
 	let newFood: Food = {
-		name: '',
+		name: `Comparison Food ${foodCount + 1}`,
 		allenNote: '',
 		source: '',
 		servingG: 100,
@@ -18,6 +23,14 @@
 		proteinG: 0,
 		fruitVegPercent: 0
 	};
+
+	onMount(() => {
+		// Select the text in the name input field
+		if (nameInput) {
+			nameInput.focus();
+			nameInput.select();
+		}
+	});
 
 	function handleSubmit() {
 		// Fill in empty values for allenNote and source
@@ -48,6 +61,7 @@
 				id="name"
 				class="input input-bordered w-full"
 				bind:value={newFood.name}
+				bind:this={nameInput}
 				required
 			/>
 		</div>

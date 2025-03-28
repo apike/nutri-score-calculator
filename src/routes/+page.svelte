@@ -102,7 +102,7 @@
 		<div
 			class="bg-base-100 fixed inset-0 z-20 transition-all duration-300 md:static md:z-auto md:w-1/2 md:border-l"
 		>
-			<AddFoodForm onClose={() => (addingFood = false)} onSave={addFood} />
+			<AddFoodForm onClose={() => (addingFood = false)} onSave={addFood} foodCount={foods.length} />
 		</div>
 	{:else}
 		<FoodDetail {selectedFood} onClose={() => (selectedFood = null)} />
