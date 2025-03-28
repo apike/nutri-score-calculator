@@ -91,43 +91,43 @@
 			<h1 class="text-3xl font-bold">Nutri-Score Calculator</h1>
 		</div>
 
-		<!-- Add Food button -->
-		<button
-			class="btn btn-primary mb-4 ml-auto w-full select-none md:max-w-[200px]"
-			onclick={() => {
-				selectedFood = null;
-				addingFood = true;
-			}}
-		>
-			<span class="mr-1">+</span> Add New Food
-		</button>
+		<!-- Flex container for tabs and Add Food button -->
+		<div class="mb-4 flex items-center justify-between">
+			<!-- Category Filter Tabs -->
+			<div role="tablist" class="tabs tabs-border">
+				<a
+					role="tab"
+					class="tab {selectedCategory === 'all' ? 'tab-active' : ''}"
+					onclick={() => (selectedCategory = 'all')}
+				>
+					All Foods
+				</a>
+				<a
+					role="tab"
+					class="tab {selectedCategory === 'cereal' ? 'tab-active' : ''}"
+					onclick={() => (selectedCategory = 'cereal')}
+				>
+					Cereals
+				</a>
+				<a
+					role="tab"
+					class="tab {selectedCategory === 'snack' ? 'tab-active' : ''}"
+					onclick={() => (selectedCategory = 'snack')}
+				>
+					Snacks
+				</a>
+			</div>
 
-		<!-- Category Filter Tabs -->
-		<div class="tabs tabs-box mb-4">
-			<input
-				type="radio"
-				name="category_tabs"
-				class="tab"
-				aria-label="All Foods"
-				checked={selectedCategory === 'all'}
-				onclick={() => (selectedCategory = 'all')}
-			/>
-			<input
-				type="radio"
-				name="category_tabs"
-				class="tab"
-				aria-label="Cereal"
-				checked={selectedCategory === 'cereal'}
-				onclick={() => (selectedCategory = 'cereal')}
-			/>
-			<input
-				type="radio"
-				name="category_tabs"
-				class="tab"
-				aria-label="Snack"
-				checked={selectedCategory === 'snack'}
-				onclick={() => (selectedCategory = 'snack')}
-			/>
+			<!-- Add Food button -->
+			<button
+				class="btn btn-primary select-none md:max-w-[200px]"
+				onclick={() => {
+					selectedFood = null;
+					addingFood = true;
+				}}
+			>
+				<span class="mr-1">+</span> Add New Food
+			</button>
 		</div>
 
 		<!-- Table with overflow - only this area should scroll -->
