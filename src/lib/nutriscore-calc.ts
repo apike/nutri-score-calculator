@@ -18,7 +18,7 @@ export interface NutrientsPer100g {
 }
 
 export interface NutrientPoints {
-	// Individual component points - negative for unfavorable, positive for favorable
+	// Individual component points - positive for unfavorable, negative for favorable
 	energy: number;
 	saturates: number;
 	sugars: number;
@@ -128,15 +128,15 @@ export function calculateNutrientPoints(data: NutrientsPer100g): NutrientPoints 
 	}
 
 	return {
-		// Return unfavorable points as negative values
-		energy: -energyPoints,
-		saturates: -saturatesPoints,
-		sugars: -sugarsPoints,
-		salt: -saltPoints,
-		// Return favorable points as positive
-		protein: proteinPoints,
-		fibre: fibrePoints,
-		fruitVeg: fruitVegPoints,
+		// Return unfavorable points as positive values (bad)
+		energy: energyPoints,
+		saturates: saturatesPoints,
+		sugars: sugarsPoints,
+		salt: saltPoints,
+		// Return favorable points as negative values (good)
+		protein: -proteinPoints,
+		fibre: -fibrePoints,
+		fruitVeg: -fruitVegPoints,
 		// Keep original scoring values as positive for clarity
 		aPoints,
 		cPoints,
@@ -179,7 +179,7 @@ export function nutriScoreColor(letter: string): string {
 		case 'E':
 			return '#e63e11'; // Red
 		default:
-			return '#777777'; // Gray for unknown
+			return '#AAAAAA'; // Gray for unknown
 	}
 }
 
