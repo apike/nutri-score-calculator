@@ -2,9 +2,9 @@
 </script>
 
 <div class="hero bg-base-200 min-h-screen">
-	<div class="hero-content text-center">
+	<div class="hero-content">
 		<div class="max-w-md">
-			<h1 class="mb-8 text-5xl font-bold">Nutri-Score</h1>
+			<h1 class="mb-8 text-center text-5xl font-bold">Nutri-Score</h1>
 			<div class="mb-8 flex justify-center gap-4">
 				<div
 					class="flex h-12 w-12 items-center justify-center rounded-md text-2xl font-bold"
@@ -51,12 +51,14 @@
 			<div class="py-6">
 				We don't have labelling like this yet in the US or Canada, so here is a quick calculator for
 				snack foods.
-				<ul>
+				<ul class="list-disc pl-5">
 					<li>Some cereals and snack bars are pre-loaded.</li>
 					<li>If you add a food, it will be stored in your browser.</li>
 				</ul>
 			</div>
-			<a href="/calculator" class="btn btn-primary"> Open Calculator </a>
+			<div class="text-right">
+				<a href="/calculator" class="btn btn-primary"> Open Calculator </a>
+			</div>
 		</div>
 	</div>
 </div>
@@ -65,6 +67,9 @@
 	<p class="text-sm">
 		Made with ❤️ by <a href="https://allenpike.com/" class="text-primary hover:underline"
 			>Allen Pike</a
-		>
+		>.
+		<a href="https://github.com/apike/nutri-score-calculator" class="text-primary hover:underline"
+			>Forkable on GitHub</a
+		>.
 	</p>
 </footer>
