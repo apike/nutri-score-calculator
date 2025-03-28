@@ -6,6 +6,7 @@
 		nutriScoreTextColor,
 		calculateNutrientPoints
 	} from '$lib/nutriscore-calc';
+	import NutrientCard from './NutrientCard.svelte';
 
 	export let selectedFood:
 		| (Food & {
@@ -124,145 +125,74 @@
 
 					<div class="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
 						<!-- Calories -->
-						<div class="card bg-base-200 p-3">
-							<h4 class="font-medium">Calories</h4>
-							<div class="flex items-baseline justify-between">
-								<div class="flex items-baseline">
-									<span class="text-xl font-bold">
-										{showNormalized
-											? Math.round((selectedFood.calories * 50) / selectedFood.servingG)
-											: selectedFood.calories}
-									</span>
-									<span class="ml-1 text-xs">kcal</span>
-								</div>
-								{#if nutrientPoints}
-									{@const style = getBadgeStyle(nutrientPoints.energy)}
-									<span class={`badge ${style.color}`}
-										>{style.prefix}{nutrientPoints.energy} pts</span
-									>
-								{/if}
-							</div>
-						</div>
+						<NutrientCard
+							name="Calories"
+							value={showNormalized
+								? Math.round((selectedFood.calories * 50) / selectedFood.servingG)
+								: selectedFood.calories}
+							unit="kcal"
+							points={nutrientPoints ? nutrientPoints.energy : null}
+						/>
 
 						<!-- Saturated Fat -->
-						<div class="card bg-base-200 p-3">
-							<h4 class="font-medium">Saturated Fat</h4>
-							<div class="flex items-baseline justify-between">
-								<div class="flex items-baseline">
-									<span class="text-xl font-bold">
-										{showNormalized
-											? ((selectedFood.saturatedFatG * 50) / selectedFood.servingG).toFixed(1)
-											: selectedFood.saturatedFatG.toFixed(1)}
-									</span>
-									<span class="ml-1 text-xs">g</span>
-								</div>
-								{#if nutrientPoints}
-									{@const style = getBadgeStyle(nutrientPoints.saturates)}
-									<span class={`badge ${style.color}`}
-										>{style.prefix}{nutrientPoints.saturates} pts</span
-									>
-								{/if}
-							</div>
-						</div>
+						<NutrientCard
+							name="Saturated Fat"
+							value={showNormalized
+								? (selectedFood.saturatedFatG * 50) / selectedFood.servingG
+								: selectedFood.saturatedFatG}
+							unit="g"
+							points={nutrientPoints ? nutrientPoints.saturates : null}
+						/>
 
 						<!-- Total Sugar -->
-						<div class="card bg-base-200 p-3">
-							<h4 class="font-medium">Sugar</h4>
-							<div class="flex items-baseline justify-between">
-								<div class="flex items-baseline">
-									<span class="text-xl font-bold">
-										{showNormalized
-											? ((selectedFood.totalSugarG * 50) / selectedFood.servingG).toFixed(1)
-											: selectedFood.totalSugarG.toFixed(1)}
-									</span>
-									<span class="ml-1 text-xs">g</span>
-								</div>
-								{#if nutrientPoints}
-									{@const style = getBadgeStyle(nutrientPoints.sugars)}
-									<span class={`badge ${style.color}`}
-										>{style.prefix}{nutrientPoints.sugars} pts</span
-									>
-								{/if}
-							</div>
-						</div>
+						<NutrientCard
+							name="Sugar"
+							value={showNormalized
+								? (selectedFood.totalSugarG * 50) / selectedFood.servingG
+								: selectedFood.totalSugarG}
+							unit="g"
+							points={nutrientPoints ? nutrientPoints.sugars : null}
+						/>
 
 						<!-- Sodium -->
-						<div class="card bg-base-200 p-3">
-							<h4 class="font-medium">Sodium</h4>
-							<div class="flex items-baseline justify-between">
-								<div class="flex items-baseline">
-									<span class="text-xl font-bold">
-										{showNormalized
-											? Math.round((selectedFood.sodiumMg * 50) / selectedFood.servingG)
-											: selectedFood.sodiumMg}
-									</span>
-									<span class="ml-1 text-xs">mg</span>
-								</div>
-								{#if nutrientPoints}
-									{@const style = getBadgeStyle(nutrientPoints.salt)}
-									<span class={`badge ${style.color}`}>{style.prefix}{nutrientPoints.salt} pts</span
-									>
-								{/if}
-							</div>
-						</div>
+						<NutrientCard
+							name="Sodium"
+							value={showNormalized
+								? Math.round((selectedFood.sodiumMg * 50) / selectedFood.servingG)
+								: selectedFood.sodiumMg}
+							unit="mg"
+							points={nutrientPoints ? nutrientPoints.salt : null}
+							decimals={0}
+						/>
 
 						<!-- Protein -->
-						<div class="card bg-base-200 p-3">
-							<h4 class="font-medium">Protein</h4>
-							<div class="flex items-baseline justify-between">
-								<div class="flex items-baseline">
-									<span class="text-xl font-bold">
-										{showNormalized
-											? ((selectedFood.proteinG * 50) / selectedFood.servingG).toFixed(1)
-											: selectedFood.proteinG.toFixed(1)}
-									</span>
-									<span class="ml-1 text-xs">g</span>
-								</div>
-								{#if nutrientPoints}
-									{@const style = getBadgeStyle(nutrientPoints.protein)}
-									<span class={`badge ${style.color}`}
-										>{style.prefix}{nutrientPoints.protein} pts</span
-									>
-								{/if}
-							</div>
-						</div>
+						<NutrientCard
+							name="Protein"
+							value={showNormalized
+								? (selectedFood.proteinG * 50) / selectedFood.servingG
+								: selectedFood.proteinG}
+							unit="g"
+							points={nutrientPoints ? nutrientPoints.protein : null}
+						/>
 
 						<!-- Fibre -->
-						<div class="card bg-base-200 p-3">
-							<h4 class="font-medium">Fibre</h4>
-							<div class="flex items-baseline justify-between">
-								<div class="flex items-baseline">
-									<span class="text-xl font-bold">
-										{showNormalized
-											? ((selectedFood.fibreG * 50) / selectedFood.servingG).toFixed(1)
-											: selectedFood.fibreG.toFixed(1)}
-									</span>
-									<span class="ml-1 text-xs">g</span>
-								</div>
-								{#if nutrientPoints}
-									{@const style = getBadgeStyle(nutrientPoints.fibre)}
-									<span class={`badge ${style.color}`}
-										>{style.prefix}{nutrientPoints.fibre} pts</span
-									>
-								{/if}
-							</div>
-						</div>
+						<NutrientCard
+							name="Fibre"
+							value={showNormalized
+								? (selectedFood.fibreG * 50) / selectedFood.servingG
+								: selectedFood.fibreG}
+							unit="g"
+							points={nutrientPoints ? nutrientPoints.fibre : null}
+						/>
 
 						<!-- Fruit/Veg Percentage -->
-						<div class="card bg-base-200 p-3">
-							<h4 class="font-medium">Fruit & Veg %</h4>
-							<div class="flex items-baseline justify-between">
-								<div class="flex items-baseline">
-									<span class="text-xl font-bold">{selectedFood.fruitVegPercent ?? 0}%</span>
-								</div>
-								{#if nutrientPoints}
-									{@const style = getBadgeStyle(nutrientPoints.fruitVeg)}
-									<span class={`badge ${style.color}`}
-										>{style.prefix}{nutrientPoints.fruitVeg} pts</span
-									>
-								{/if}
-							</div>
-						</div>
+						<NutrientCard
+							name="Fruit & Veg %"
+							value={selectedFood.fruitVegPercent ?? 0}
+							unit="%"
+							points={nutrientPoints ? nutrientPoints.fruitVeg : null}
+							decimals={0}
+						/>
 					</div>
 				</div>
 			</div>
