@@ -23,17 +23,25 @@
 			.map((food) => {
 				const nutrients = nutrientsFromFood(food);
 				const score = computeFNSpoints(nutrients);
+				const scoreWithProtein = computeFNSpoints(nutrients, true);
 				return {
 					...food,
 					nutriScore: nutriScoreLetter(score),
-					fnsScore: score
+					fnsScore: score,
+					fnsScoreWithProtein: scoreWithProtein
 				};
 			})
-			.sort((a, b) => a.fnsScore - b.fnsScore)
+			.sort((a, b) => a.fnsScoreWithProtein - b.fnsScoreWithProtein)
 	);
 
 	// Track selected food for detail view
-	let selectedFood: (typeof foodScores)[number] | null = $state(null);
+	let selectedFood:
+		| (Food & {
+				nutriScore: string;
+				fnsScore: number;
+				fnsScoreWithProtein: number;
+		  })
+		| null = $state(null);
 
 	// Track if we're in add food mode
 	let addingFood = $state(false);
@@ -47,10 +55,12 @@
 		// Calculate score for new food and select it
 		const nutrients = nutrientsFromFood(newFood);
 		const score = computeFNSpoints(nutrients);
+		const scoreWithProtein = computeFNSpoints(nutrients, true);
 		selectedFood = {
 			...newFood,
 			nutriScore: nutriScoreLetter(score),
-			fnsScore: score
+			fnsScore: score,
+			fnsScoreWithProtein: scoreWithProtein
 		};
 	}
 </script>
@@ -110,7 +120,7 @@
 								>
 									{food.nutriScore}
 								</span>
-								<span class="text-base-content">({food.fnsScore})</span>
+								<span class="text-base-content">({food.fnsScoreWithProtein})</span>
 							</td>
 						</tr>
 					{/each}

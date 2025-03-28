@@ -12,6 +12,7 @@
 		| (Food & {
 				nutriScore: string;
 				fnsScore: number;
+				fnsScoreWithProtein?: number;
 		  })
 		| null = null;
 
@@ -25,6 +26,11 @@
 
 	// Get component nutrient scores using the utility function
 	$: nutrientPoints = selectedFoodNutrients ? calculateNutrientPoints(selectedFoodNutrients) : null;
+
+	// Also calculate with protein always included
+	$: nutrientPointsWithProtein = selectedFoodNutrients
+		? calculateNutrientPoints(selectedFoodNutrients, true)
+		: null;
 
 	// Helper function to determine badge style based on point value
 	function getBadgeStyle(points: number): { color: string; prefix: string } {
@@ -91,7 +97,9 @@
 							>
 								{selectedFood?.nutriScore || '?'}
 							</span>
-							<span class="ml-2 text-sm opacity-70">({selectedFood?.fnsScore} points)</span>
+							<span class="ml-2 text-sm opacity-70"
+								>({selectedFood?.fnsScoreWithProtein} points)</span
+							>
 						</div>
 					</div>
 
