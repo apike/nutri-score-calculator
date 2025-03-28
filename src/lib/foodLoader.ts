@@ -75,6 +75,7 @@ export async function loadFoods(): Promise<Food[]> {
 					fibreG,
 					totalSugarG,
 					proteinG,
+					fruitVegPercent,
 					source
 				] = fields;
 
@@ -91,6 +92,7 @@ export async function loadFoods(): Promise<Food[]> {
 				return {
 					name: cleanQuotes(name),
 					allenNote: cleanQuotes(allenNote),
+					category: cleanQuotes(category),
 					source: cleanQuotes(source),
 					servingG: parseNumber(servingG),
 					calories: parseNumber(calories),
@@ -98,7 +100,8 @@ export async function loadFoods(): Promise<Food[]> {
 					sodiumMg: parseNumber(sodiumMg),
 					fibreG: parseNumber(fibreG),
 					totalSugarG: parseNumber(totalSugarG),
-					proteinG: parseNumber(proteinG)
+					proteinG: parseNumber(proteinG),
+					fruitVegPercent: parseNumber(fruitVegPercent)
 				};
 			});
 
