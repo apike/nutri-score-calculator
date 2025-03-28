@@ -35,6 +35,15 @@
 		addNewFood(newFood);
 		foods = [newFood, ...foods];
 		addingFood = false;
+
+		// Calculate score for new food and select it
+		const nutrients = nutrientsFromFood(newFood);
+		const score = computeFNSpoints(nutrients);
+		selectedFood = {
+			...newFood,
+			nutriScore: nutriScoreLetter(score),
+			fnsScore: score
+		};
 	}
 </script>
 

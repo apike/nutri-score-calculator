@@ -123,7 +123,7 @@
 							: `per ${selectedFood.servingG}g (original serving)`}
 					</p>
 
-					<div class="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+					<div class="mt-3 grid grid-cols-2 gap-4">
 						<!-- Calories -->
 						<NutrientCard
 							name="Calories"

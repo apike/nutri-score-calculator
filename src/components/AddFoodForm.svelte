@@ -79,35 +79,37 @@
 			/>
 		</div>
 
-		<div class="form-control">
-			<label class="label" for="servingG">
-				<span class="label-text font-medium">Serving Size (g)*</span>
-			</label>
-			<input
-				type="number"
-				id="servingG"
-				class="input input-bordered w-full"
-				bind:value={servingG}
-				min="1"
-				required
-			/>
+		<div class="grid grid-cols-2 gap-4">
+			<div class="form-control">
+				<label class="label" for="servingG">
+					<span class="label-text font-medium">Serving Size (g)*</span>
+				</label>
+				<input
+					type="number"
+					id="servingG"
+					class="input input-bordered w-full"
+					bind:value={servingG}
+					min="1"
+					required
+				/>
+			</div>
+
+			<div class="form-control">
+				<label class="label" for="calories">
+					<span class="label-text font-medium">Calories*</span>
+				</label>
+				<input
+					type="number"
+					id="calories"
+					class="input input-bordered w-full"
+					bind:value={calories}
+					min="0"
+					required
+				/>
+			</div>
 		</div>
 
-		<div class="form-control">
-			<label class="label" for="calories">
-				<span class="label-text font-medium">Calories*</span>
-			</label>
-			<input
-				type="number"
-				id="calories"
-				class="input input-bordered w-full"
-				bind:value={calories}
-				min="0"
-				required
-			/>
-		</div>
-
-		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+		<div class="grid grid-cols-2 gap-4">
 			<div class="form-control">
 				<label class="label" for="saturatedFatG">
 					<span class="label-text font-medium">Saturated Fat (g)*</span>
