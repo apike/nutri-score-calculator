@@ -56,17 +56,17 @@
 </script>
 
 <!-- Main container - fixed viewport height with overflow hidden -->
-<div class="flex h-screen flex-col overflow-hidden md:flex-row md:p-0">
+<div class="flex h-[100dvh] touch-none flex-col overflow-hidden md:flex-row md:p-0">
 	<!-- Table section - fills screen on mobile, half on desktop -->
 	<div class="flex h-full w-full flex-col p-4 md:w-1/2 md:overflow-hidden">
-		<!-- Header section -->
-		<div class="mb-4">
+		<!-- Header section with no scrolling -->
+		<div class="mb-4 select-none">
 			<h1 class="text-3xl font-bold">Nutri-Score Calculator</h1>
 		</div>
 
 		<!-- Add Food button -->
 		<button
-			class="btn btn-primary mb-4 ml-auto w-full md:max-w-[200px]"
+			class="btn btn-primary mb-4 ml-auto w-full select-none md:max-w-[200px]"
 			onclick={() => {
 				selectedFood = null;
 				addingFood = true;
@@ -75,8 +75,8 @@
 			<span class="mr-1">+</span> Add New Food
 		</button>
 
-		<!-- Table with overflow -->
-		<div class="flex-1 overflow-auto">
+		<!-- Table with overflow - only this area should scroll -->
+		<div class="flex-1 overflow-auto overscroll-contain">
 			<table class="table-zebra table w-full">
 				<thead class="bg-base-100 sticky top-0 z-10">
 					<tr>
