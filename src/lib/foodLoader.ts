@@ -16,12 +16,43 @@ export interface Food {
 // In-memory array to hold user-added foods
 let userAddedFoods: Food[] = [];
 
+// Local storage key
+const USER_FOODS_STORAGE_KEY = 'userAddedFoods';
+
+// Initialize user foods from local storage
+function initUserFoodsFromStorage(): void {
+	if (typeof window !== 'undefined') {
+		const storedFoods = localStorage.getItem(USER_FOODS_STORAGE_KEY);
+		if (storedFoods) {
+			try {
+				userAddedFoods = JSON.parse(storedFoods);
+			} catch (error) {
+				console.error('Failed to parse user foods from local storage:', error);
+			}
+		}
+	}
+}
+
+// Save user foods to local storage
+function saveUserFoodsToStorage(): void {
+	if (typeof window !== 'undefined') {
+		try {
+			localStorage.setItem(USER_FOODS_STORAGE_KEY, JSON.stringify(userAddedFoods));
+		} catch (error) {
+			console.error('Failed to save user foods to local storage:', error);
+		}
+	}
+}
+
 // Helper function to clean quotes from CSV fields
 function cleanQuotes(value: string): string {
 	return value.replace(/^"|"$/g, '');
 }
 
 export async function loadFoods(): Promise<Food[]> {
+	// Initialize user foods from storage first
+	initUserFoodsFromStorage();
+
 	try {
 		const response = await fetch('/snacks.csv');
 		if (!response.ok) {
@@ -113,9 +144,16 @@ export async function loadFoods(): Promise<Food[]> {
 	}
 }
 
-// Function to add a new food to the in-memory array
+// Function to add a new food to the in-memory array and save to local storage
 export function addNewFood(food: Food): void {
 	userAddedFoods = [food, ...userAddedFoods];
+	saveUserFoodsToStorage();
+}
+
+// Function to remove a user-added food
+export function removeUserFood(foodName: string): void {
+	userAddedFoods = userAddedFoods.filter((food) => food.name !== foodName);
+	saveUserFoodsToStorage();
 }
 
 // Function to get the count of user-added foods

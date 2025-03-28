@@ -18,6 +18,9 @@
 
 	export let onClose: () => void = () => {};
 
+	// Add a callback prop for deleting a food
+	export let onDelete: (food: Food) => void = () => {};
+
 	// Toggle for display mode: true = normalized to 50g, false = original serving
 	let showNormalized = true;
 
@@ -236,18 +239,34 @@
 				<!-- Source link -->
 				<div class="flex">
 					<span class="text-sm opacity-70">Source:&nbsp;</span>
-					<a
-						href={selectedFood.source.startsWith('http')
-							? selectedFood.source
-							: `https://${selectedFood.source}`}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-primary text-sm hover:underline"
-					>
-						{extractDomain(selectedFood.source)}
-					</a>
+					{#if selectedFood.category === 'user' && (!selectedFood.source || selectedFood.source.trim() === '')}
+						<span class="text-primary text-sm">You</span>
+					{:else}
+						<a
+							href={selectedFood.source.startsWith('http')
+								? selectedFood.source
+								: `https://${selectedFood.source}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-primary text-sm hover:underline"
+						>
+							{extractDomain(selectedFood.source)}
+						</a>
+					{/if}
 				</div>
 			</div>
+
+			<!-- Delete button for user-added foods -->
+			{#if selectedFood.category === 'user'}
+				<div class="mt-6 flex justify-center pt-2">
+					<button
+						class="btn btn-outline hover:bg-error hover:text-error-content hover:border-error transition-colors"
+						onclick={() => onDelete(selectedFood)}
+					>
+						Delete Food
+					</button>
+				</div>
+			{/if}
 		</div>
 	{:else}
 		<div class="flex h-full items-center justify-center">

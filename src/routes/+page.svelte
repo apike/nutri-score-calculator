@@ -7,7 +7,13 @@
 		nutriScoreTextColor
 	} from '$lib/nutriscore-calc';
 	import type { NutrientsPer100g } from '$lib/nutriscore-calc';
-	import { loadFoods, addNewFood, getUserAddedFoodsCount, type Food } from '$lib/foodLoader';
+	import {
+		loadFoods,
+		addNewFood,
+		getUserAddedFoodsCount,
+		removeUserFood,
+		type Food
+	} from '$lib/foodLoader';
 	import { onMount } from 'svelte';
 	import FoodDetail from '../components/FoodDetail.svelte';
 	import AddFoodForm from '../components/AddFoodForm.svelte';
@@ -79,6 +85,18 @@
 			fnsScore: score,
 			fnsScoreWithProtein: scoreWithProtein
 		};
+	}
+
+	// Function to remove a user food
+	function handleRemoveFood(food: Food) {
+		if (food.category === 'user' && confirm(`Are you sure you want to delete "${food.name}"?`)) {
+			removeUserFood(food.name);
+			foods = foods.filter((f) => f.name !== food.name);
+
+			if (selectedFood && selectedFood.name === food.name) {
+				selectedFood = null;
+			}
+		}
 	}
 </script>
 
@@ -186,6 +204,6 @@
 			/>
 		</div>
 	{:else}
-		<FoodDetail {selectedFood} onClose={() => (selectedFood = null)} />
+		<FoodDetail {selectedFood} onClose={() => (selectedFood = null)} onDelete={handleRemoveFood} />
 	{/if}
 </div>

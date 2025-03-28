@@ -10,7 +10,7 @@
 	let nameInput: HTMLInputElement;
 
 	// Form field values
-	let foodName = foodCount === 0 ? 'Comparison Food' : `Comparison Food ${foodCount + 1}`;
+	let foodName = foodCount === 0 ? 'Snack Food' : `Snack Food ${foodCount + 1}`;
 	let allenNote = '';
 	let category = 'user'; // Default category for user-added foods
 	let source = '';
@@ -68,7 +68,7 @@
 	>
 		<div class="form-control">
 			<label class="label" for="name">
-				<span class="label-text font-medium">Food Name*</span>
+				<span class="label-text font-medium">Food Name</span>
 			</label>
 			<input
 				type="text"
@@ -84,7 +84,7 @@
 		<div class="grid grid-cols-2 gap-4">
 			<div class="form-control">
 				<label class="label" for="servingG">
-					<span class="label-text font-medium">Serving Size (g)*</span>
+					<span class="label-text font-medium">Serving Size (g)</span>
 				</label>
 				<input
 					type="number"
@@ -99,7 +99,7 @@
 
 			<div class="form-control">
 				<label class="label" for="calories">
-					<span class="label-text font-medium">Calories*</span>
+					<span class="label-text font-medium">Calories</span>
 				</label>
 				<input
 					type="number"
@@ -111,12 +111,10 @@
 					inputmode="numeric"
 				/>
 			</div>
-		</div>
 
-		<div class="grid grid-cols-2 gap-4">
 			<div class="form-control">
 				<label class="label" for="saturatedFatG">
-					<span class="label-text font-medium">Saturated Fat (g)*</span>
+					<span class="label-text font-medium">Saturated Fat (g)</span>
 				</label>
 				<input
 					type="number"
@@ -131,23 +129,8 @@
 			</div>
 
 			<div class="form-control">
-				<label class="label" for="sodiumMg">
-					<span class="label-text font-medium">Sodium (mg)*</span>
-				</label>
-				<input
-					type="number"
-					id="sodiumMg"
-					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
-					bind:value={sodiumMg}
-					min="0"
-					required
-					inputmode="numeric"
-				/>
-			</div>
-
-			<div class="form-control">
 				<label class="label" for="fibreG">
-					<span class="label-text font-medium">Fibre (g)*</span>
+					<span class="label-text font-medium">Fibre (g)</span>
 				</label>
 				<input
 					type="number"
@@ -163,7 +146,7 @@
 
 			<div class="form-control">
 				<label class="label" for="totalSugarG">
-					<span class="label-text font-medium">Total Sugar (g)*</span>
+					<span class="label-text font-medium">Total Sugar (g)</span>
 				</label>
 				<input
 					type="number"
@@ -179,7 +162,7 @@
 
 			<div class="form-control">
 				<label class="label" for="proteinG">
-					<span class="label-text font-medium">Protein (g)*</span>
+					<span class="label-text font-medium">Protein (g)</span>
 				</label>
 				<input
 					type="number"
@@ -194,8 +177,23 @@
 			</div>
 
 			<div class="form-control">
+				<label class="label" for="sodiumMg">
+					<span class="label-text font-medium">Sodium (mg)</span>
+				</label>
+				<input
+					type="number"
+					id="sodiumMg"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
+					bind:value={sodiumMg}
+					min="0"
+					required
+					inputmode="numeric"
+				/>
+			</div>
+
+			<div class="form-control">
 				<label class="label" for="fruitVegPercent">
-					<span class="label-text font-medium">Fruit & Veg %</span>
+					<span class="label-text font-medium">Whole Fruit & Veg %</span>
 				</label>
 				<input
 					type="number"
