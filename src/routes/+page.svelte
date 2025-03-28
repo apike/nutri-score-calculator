@@ -62,7 +62,7 @@
 					<!-- Add Food row -->
 					<tr
 						class="bg-base-200 cursor-pointer"
-						on:click={() => {
+						onclick={() => {
 							selectedFood = null;
 							addingFood = true;
 						}}
@@ -77,7 +77,7 @@
 					{#each foodScores as food}
 						<tr
 							class="cursor-pointer"
-							on:click={() => {
+							onclick={() => {
 								selectedFood = food;
 								addingFood = false;
 							}}

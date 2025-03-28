@@ -48,10 +48,16 @@
 	<div class="flex items-center justify-between">
 		<h2 class="text-2xl font-bold">Add New Food</h2>
 		<!-- Mobile close button -->
-		<button class="btn btn-circle btn-ghost md:hidden" on:click={onClose}>✕</button>
+		<button class="btn btn-circle btn-ghost md:hidden" onclick={onClose}>✕</button>
 	</div>
 
-	<form on:submit|preventDefault={handleSubmit} class="mt-6 space-y-4">
+	<form
+		onsubmit={(e) => {
+			e.preventDefault();
+			handleSubmit();
+		}}
+		class="mt-6 space-y-4"
+	>
 		<div class="form-control">
 			<label class="label" for="name">
 				<span class="label-text font-medium">Food Name*</span>
@@ -185,7 +191,7 @@
 		</div>
 
 		<div class="mt-8 flex justify-end space-x-4">
-			<button type="button" class="btn" on:click={onClose}>Cancel</button>
+			<button type="button" class="btn" onclick={onClose}>Cancel</button>
 			<button type="submit" class="btn btn-primary">Save Food</button>
 		</div>
 	</form>
