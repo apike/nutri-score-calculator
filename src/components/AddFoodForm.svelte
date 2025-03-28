@@ -73,7 +73,7 @@
 			<input
 				type="text"
 				id="name"
-				class="input input-bordered w-full"
+				class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 				bind:value={foodName}
 				bind:this={nameInput}
 				required
@@ -89,7 +89,7 @@
 				<input
 					type="number"
 					id="servingG"
-					class="input input-bordered w-full"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 					bind:value={servingG}
 					min="1"
 					required
@@ -104,7 +104,7 @@
 				<input
 					type="number"
 					id="calories"
-					class="input input-bordered w-full"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 					bind:value={calories}
 					min="0"
 					required
@@ -121,7 +121,7 @@
 				<input
 					type="number"
 					id="saturatedFatG"
-					class="input input-bordered w-full"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 					bind:value={saturatedFatG}
 					min="0"
 					step="0.1"
@@ -137,7 +137,7 @@
 				<input
 					type="number"
 					id="sodiumMg"
-					class="input input-bordered w-full"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 					bind:value={sodiumMg}
 					min="0"
 					required
@@ -152,7 +152,7 @@
 				<input
 					type="number"
 					id="fibreG"
-					class="input input-bordered w-full"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 					bind:value={fibreG}
 					min="0"
 					step="0.1"
@@ -168,7 +168,7 @@
 				<input
 					type="number"
 					id="totalSugarG"
-					class="input input-bordered w-full"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 					bind:value={totalSugarG}
 					min="0"
 					step="0.1"
@@ -184,7 +184,7 @@
 				<input
 					type="number"
 					id="proteinG"
-					class="input input-bordered w-full"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 					bind:value={proteinG}
 					min="0"
 					step="0.1"
@@ -200,7 +200,7 @@
 				<input
 					type="number"
 					id="fruitVegPercent"
-					class="input input-bordered w-full"
+					class="focus:border-primary focus:ring-primary w-full rounded-md border-gray-300 focus:ring-1 focus:outline-none"
 					bind:value={fruitVegPercent}
 					min="0"
 					max="100"
