@@ -12,6 +12,7 @@
 	// Form field values
 	let foodName = foodCount === 0 ? 'Comparison Food' : `Comparison Food ${foodCount + 1}`;
 	let allenNote = '';
+	let category = 'user'; // Default category for user-added foods
 	let source = '';
 	let servingG = '';
 	let calories = '';
@@ -35,6 +36,7 @@
 		const completeFood: Food = {
 			name: foodName,
 			allenNote: allenNote || '',
+			category,
 			source: source || '',
 			servingG: Number(servingG),
 			calories: Number(calories),

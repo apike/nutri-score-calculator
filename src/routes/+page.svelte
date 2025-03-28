@@ -17,6 +17,9 @@
 		foods = await loadFoods();
 	});
 
+	// Category filter state
+	let selectedCategory: 'all' | 'cereal' | 'snack' = $state('all');
+
 	// Calculate Nutri-Score for each food
 	let foodScores = $derived(
 		foods
@@ -32,6 +35,20 @@
 				};
 			})
 			.sort((a, b) => a.fnsScoreWithProtein - b.fnsScoreWithProtein)
+	);
+
+	// Filter foods based on selected category
+	let filteredFoodScores = $derived(
+		foodScores.filter((food) => {
+			// Always show user-added foods
+			if (food.category === 'user') return true;
+
+			// Show all foods if 'all' is selected
+			if (selectedCategory === 'all') return true;
+
+			// Otherwise, filter by the selected category
+			return food.category === selectedCategory;
+		})
 	);
 
 	// Track selected food for detail view
@@ -85,6 +102,34 @@
 			<span class="mr-1">+</span> Add New Food
 		</button>
 
+		<!-- Category Filter Tabs -->
+		<div class="tabs tabs-box mb-4">
+			<input
+				type="radio"
+				name="category_tabs"
+				class="tab"
+				aria-label="All Foods"
+				checked={selectedCategory === 'all'}
+				onclick={() => (selectedCategory = 'all')}
+			/>
+			<input
+				type="radio"
+				name="category_tabs"
+				class="tab"
+				aria-label="Cereal"
+				checked={selectedCategory === 'cereal'}
+				onclick={() => (selectedCategory = 'cereal')}
+			/>
+			<input
+				type="radio"
+				name="category_tabs"
+				class="tab"
+				aria-label="Snack"
+				checked={selectedCategory === 'snack'}
+				onclick={() => (selectedCategory = 'snack')}
+			/>
+		</div>
+
 		<!-- Table with overflow - only this area should scroll -->
 		<div class="flex-1 overflow-auto overscroll-contain">
 			<table class="table-zebra table w-full">
@@ -96,7 +141,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each foodScores as food}
+					{#each filteredFoodScores as food}
 						<tr
 							class="cursor-pointer"
 							onclick={() => {

@@ -54,7 +54,8 @@
 			{#if proteinExcluded}
 				<div class="flex flex-col items-end">
 					<span class="badge badge-neutral text-xs">{points} pts</span>
-					<span class="mt-1 text-xs">Over 10 bad points, protein is excluded from final score</span>
+					<span class="mt-1 text-xs">Over 10 bad points, protein is excluded from letter grade</span
+					>
 				</div>
 			{:else}
 				{@const style = getBadgeStyle(points)}
