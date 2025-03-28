@@ -91,6 +91,7 @@
 					bind:value={servingG}
 					min="1"
 					required
+					inputmode="numeric"
 				/>
 			</div>
 
@@ -105,6 +106,7 @@
 					bind:value={calories}
 					min="0"
 					required
+					inputmode="numeric"
 				/>
 			</div>
 		</div>
@@ -122,6 +124,7 @@
 					min="0"
 					step="0.1"
 					required
+					inputmode="decimal"
 				/>
 			</div>
 
@@ -136,6 +139,7 @@
 					bind:value={sodiumMg}
 					min="0"
 					required
+					inputmode="numeric"
 				/>
 			</div>
 
@@ -151,6 +155,7 @@
 					min="0"
 					step="0.1"
 					required
+					inputmode="decimal"
 				/>
 			</div>
 
@@ -166,6 +171,7 @@
 					min="0"
 					step="0.1"
 					required
+					inputmode="decimal"
 				/>
 			</div>
 
@@ -181,6 +187,7 @@
 					min="0"
 					step="0.1"
 					required
+					inputmode="decimal"
 				/>
 			</div>
 
@@ -195,6 +202,7 @@
 					bind:value={fruitVegPercent}
 					min="0"
 					max="100"
+					inputmode="numeric"
 				/>
 			</div>
 		</div>
