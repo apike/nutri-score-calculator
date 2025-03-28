@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { computeFNSpoints, nutriScoreLetter, nutrientsFromFood } from '$lib/nutriscore-calc';
+	import {
+		computeFNSpoints,
+		nutriScoreLetter,
+		nutrientsFromFood,
+		nutriScoreColor,
+		nutriScoreTextColor
+	} from '$lib/nutriscore-calc';
 	import type { NutrientsPer100g } from '$lib/nutriscore-calc';
 	import { loadFoods, addNewFood, getUserAddedFoodsCount, type Food } from '$lib/foodLoader';
 	import { onMount } from 'svelte';
@@ -13,15 +19,17 @@
 
 	// Calculate Nutri-Score for each food
 	let foodScores = $derived(
-		foods.map((food) => {
-			const nutrients = nutrientsFromFood(food);
-			const score = computeFNSpoints(nutrients);
-			return {
-				...food,
-				nutriScore: nutriScoreLetter(score),
-				fnsScore: score
-			};
-		})
+		foods
+			.map((food) => {
+				const nutrients = nutrientsFromFood(food);
+				const score = computeFNSpoints(nutrients);
+				return {
+					...food,
+					nutriScore: nutriScoreLetter(score),
+					fnsScore: score
+				};
+			})
+			.sort((a, b) => a.fnsScore - b.fnsScore)
 	);
 
 	// Track selected food for detail view
@@ -93,7 +101,17 @@
 								{food.name}
 							</td>
 							<td class="max-w-xs">{food.allenNote}</td>
-							<td class="font-bold">{food.nutriScore} ({food.fnsScore})</td>
+							<td>
+								<span
+									class="rounded-md px-2 py-1 font-bold"
+									style="background-color: {nutriScoreColor(
+										food.nutriScore
+									)}; color: {nutriScoreTextColor(food.nutriScore)}"
+								>
+									{food.nutriScore}
+								</span>
+								<span class="text-base-content">({food.fnsScore})</span>
+							</td>
 						</tr>
 					{/each}
 				</tbody>
