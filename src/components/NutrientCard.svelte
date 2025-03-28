@@ -7,6 +7,7 @@
 	export let unit: string;
 	export let points: number | null = null;
 	export let decimals: number = 1;
+	export let proteinExcluded: boolean = false;
 
 	// Helper function to determine badge style based on point value
 	function getBadgeStyle(points: number): { backgroundColor: string; prefix: string } {
@@ -50,10 +51,17 @@
 			<span class="ml-1 text-xs">{unit}</span>
 		</div>
 		{#if points !== null}
-			{@const style = getBadgeStyle(points)}
-			<span class="badge text-black" style="background-color: {style.backgroundColor}"
-				>{style.prefix}{points} pts</span
-			>
+			{#if proteinExcluded}
+				<div class="flex flex-col items-end">
+					<span class="badge badge-neutral text-xs">{points} pts</span>
+					<span class="mt-1 text-xs">Over 10 bad points, protein is excluded from final score</span>
+				</div>
+			{:else}
+				{@const style = getBadgeStyle(points)}
+				<span class="badge text-black" style="background-color: {style.backgroundColor}"
+					>{style.prefix}{points} pts</span
+				>
+			{/if}
 		{/if}
 	</div>
 </div>

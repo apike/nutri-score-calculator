@@ -1,6 +1,7 @@
 export interface Food {
 	name: string;
 	allenNote: string;
+	category: string;
 	source: string;
 	servingG: number;
 	calories: number;
@@ -22,7 +23,7 @@ function cleanQuotes(value: string): string {
 
 export async function loadFoods(): Promise<Food[]> {
 	try {
-		const response = await fetch('/cereals.csv');
+		const response = await fetch('/snacks.csv');
 		if (!response.ok) {
 			console.error('Failed to fetch CSV:', response.status, response.statusText);
 			return [...userAddedFoods];
@@ -66,9 +67,10 @@ export async function loadFoods(): Promise<Food[]> {
 				const [
 					name,
 					allenNote,
+					category,
 					servingG,
 					calories,
-					fatG,
+					saturatedFatG,
 					sodiumMg,
 					fibreG,
 					totalSugarG,
@@ -92,7 +94,7 @@ export async function loadFoods(): Promise<Food[]> {
 					source: cleanQuotes(source),
 					servingG: parseNumber(servingG),
 					calories: parseNumber(calories),
-					saturatedFatG: parseNumber(fatG) * 0.1, // Estimate saturated fat as 10% of total fat, spreadsheet needs updated
+					saturatedFatG: parseNumber(saturatedFatG),
 					sodiumMg: parseNumber(sodiumMg),
 					fibreG: parseNumber(fibreG),
 					totalSugarG: parseNumber(totalSugarG),

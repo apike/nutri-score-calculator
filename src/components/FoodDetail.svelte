@@ -173,6 +173,7 @@
 								: selectedFood.proteinG}
 							unit="g"
 							points={nutrientPoints ? nutrientPoints.protein : null}
+							proteinExcluded={nutrientPoints ? nutrientPoints.proteinExcluded : false}
 						/>
 
 						<!-- Fibre -->

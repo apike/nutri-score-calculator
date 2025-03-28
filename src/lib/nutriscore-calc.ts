@@ -30,6 +30,7 @@ export interface NutrientPoints {
 	aPoints: number; // Total unfavorable points (positive value)
 	cPoints: number; // Total favorable points (positive value)
 	fnsScore: number; // Final score
+	proteinExcluded: boolean; // Flag indicating if protein was excluded from calculation
 }
 
 /**
@@ -117,11 +118,13 @@ export function calculateNutrientPoints(data: NutrientsPer100g): NutrientPoints 
 	// Apply special protein rule
 	let cPoints;
 	let fnsScore;
+	let proteinExcluded = false;
 
 	if (aPoints >= 11 && !data.isCheese) {
 		// Exclude protein points if A ≥ 11 and not cheese
 		cPoints = fibrePoints + fruitVegPoints;
 		fnsScore = aPoints - cPoints;
+		proteinExcluded = true;
 	} else {
 		cPoints = proteinPoints + fibrePoints + fruitVegPoints;
 		fnsScore = aPoints - cPoints;
@@ -140,7 +143,8 @@ export function calculateNutrientPoints(data: NutrientsPer100g): NutrientPoints 
 		// Keep original scoring values as positive for clarity
 		aPoints,
 		cPoints,
-		fnsScore
+		fnsScore,
+		proteinExcluded
 	};
 }
 
