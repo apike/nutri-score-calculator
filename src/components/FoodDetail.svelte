@@ -68,7 +68,7 @@
 </script>
 
 <div
-	class={`bg-base-100 p-6 transition-all duration-300 ${selectedFood ? 'fixed inset-0 z-20 md:static md:z-auto' : 'hidden md:block'} md:w-1/2 md:border-l`}
+	class={`bg-base-100 overflow-auto p-6 transition-all duration-300 ${selectedFood ? 'fixed inset-0 z-20 md:static md:z-auto' : 'hidden md:block'} md:w-1/2 md:border-l`}
 >
 	{#if selectedFood}
 		<!-- Mobile close button -->

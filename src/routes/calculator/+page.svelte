@@ -196,7 +196,7 @@
 	<!-- Food detail or add food form -->
 	{#if addingFood}
 		<div
-			class="bg-base-100 fixed inset-0 z-20 transition-all duration-300 md:static md:z-auto md:w-1/2 md:border-l"
+			class="bg-base-100 fixed inset-0 z-20 overflow-auto transition-all duration-300 md:static md:z-auto md:w-1/2 md:border-l"
 		>
 			<AddFoodForm
 				onClose={() => (addingFood = false)}

@@ -53,6 +53,13 @@
 				snack foods.
 				<ul class="list-disc pl-5">
 					<li>Some cereals and snack bars are pre-loaded.</li>
+					<li>
+						The formula is based on the
+						<a
+							href="https://www.aesan.gob.es/AECOSAN/docs/documentos/Nutri_Score/2022_main_algorithm_report_update_FINAL.pdf"
+							class="text-primary hover:underline">2022 Nutri-Score algorithm</a
+						>.
+					</li>
 					<li>If you add a food, it will be stored in your browser.</li>
 				</ul>
 			</div>
