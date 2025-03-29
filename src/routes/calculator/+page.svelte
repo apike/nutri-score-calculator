@@ -121,12 +121,12 @@
 </script>
 
 <!-- Main container - fixed viewport height with overflow hidden -->
-<div class="bg-haze flex h-[100dvh] touch-none flex-col overflow-hidden p-6 md:flex-row">
+<div class="bg-haze flex h-[100dvh] touch-none flex-col overflow-hidden p-4 md:flex-row md:p-6">
 	<!-- Table section - fills screen on mobile, half on desktop -->
 	<div class="mr-4 flex h-full w-full flex-col md:w-1/2 md:overflow-hidden">
 		<!-- Header section with no scrolling -->
 		<div class="mb-4 flex items-center justify-between select-none">
-			<h1 class="text-3xl font-bold">Nutri-Score Calculator</h1>
+			<h1 class="text-2xl font-bold">Nutri-Scoreometer</h1>
 			<a href="/" class="text-primary hover:underline">About</a>
 		</div>
 

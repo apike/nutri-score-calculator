@@ -42,3 +42,7 @@
 @theme {
 	--color-haze: oklch(0.96 0.0084 326.68);
 }
+
+.tabs-border .tab {
+	--tab-p: 0.5rem;
+}
