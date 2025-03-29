@@ -40,7 +40,14 @@
 					fnsScoreWithProtein: scoreWithProtein
 				};
 			})
-			.sort((a, b) => a.fnsScoreWithProtein - b.fnsScoreWithProtein)
+			.sort((a, b) => {
+				// First sort by Nutri-Score letter (A to E)
+				if (a.nutriScore !== b.nutriScore) {
+					return a.nutriScore.localeCompare(b.nutriScore);
+				}
+				// Then sort by fnsScoreWithProtein from low to high within each letter category
+				return a.fnsScoreWithProtein - b.fnsScoreWithProtein;
+			})
 	);
 
 	// Filter foods based on selected category

@@ -23,9 +23,7 @@ You can preview the production build with `pnpm run preview`.
 
 ## TODOS
 
-- Form doesn't scroll on mobile
-- Add Snickers
+- Add FAQ about protein
 - Form fields should select text when you select them
-- Fill item from image
+- Fill item from image (Gemini?)
 - Make nicer
-- Add add radio for "no milk", "skim milk", "2% milk"
