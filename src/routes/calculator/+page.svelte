@@ -121,9 +121,9 @@
 </script>
 
 <!-- Main container - fixed viewport height with overflow hidden -->
-<div class="flex h-[100dvh] touch-none flex-col overflow-hidden md:flex-row md:p-0">
+<div class="bg-haze flex h-[100dvh] touch-none flex-col overflow-hidden p-6 md:flex-row">
 	<!-- Table section - fills screen on mobile, half on desktop -->
-	<div class="flex h-full w-full flex-col p-4 md:w-1/2 md:overflow-hidden">
+	<div class="mr-4 flex h-full w-full flex-col md:w-1/2 md:overflow-hidden">
 		<!-- Header section with no scrolling -->
 		<div class="mb-4 flex items-center justify-between select-none">
 			<h1 class="text-3xl font-bold">Nutri-Score Calculator</h1>
@@ -148,7 +148,7 @@
 		</div>
 
 		<!-- Table with overflow - only this area should scroll -->
-		<div class="flex-1 overflow-auto overscroll-contain">
+		<div class="flex-1 overflow-auto overscroll-contain rounded-xl bg-white/90">
 			<table class="table-zebra table w-full">
 				<thead class="bg-base-100 sticky top-0 z-10">
 					<tr>
@@ -192,17 +192,26 @@
 	</div>
 
 	<!-- Food detail or add food form -->
-	{#if addingFood}
-		<div
-			class="bg-base-100 fixed inset-0 z-20 overflow-auto transition-all duration-300 md:static md:z-auto md:w-1/2 md:border-l"
-		>
+	<div
+		class="bg-base-100 overflow-auto rounded-xl transition-all duration-300 md:w-1/2 {addingFood ||
+		selectedFood
+			? 'fixed inset-0 z-20 md:static md:z-auto'
+			: 'hidden md:block'}"
+	>
+		{#if addingFood}
+			<!-- Adding Food -->
 			<AddFoodForm
 				onClose={() => (addingFood = false)}
 				onSave={addFood}
 				foodCount={getUserAddedFoodsCount()}
 			/>
-		</div>
-	{:else}
-		<FoodDetail {selectedFood} onClose={() => (selectedFood = null)} onDelete={handleRemoveFood} />
-	{/if}
+		{:else}
+			<!-- Food detail -->
+			<FoodDetail
+				{selectedFood}
+				onClose={() => (selectedFood = null)}
+				onDelete={handleRemoveFood}
+			/>
+		{/if}
+	</div>
 </div>

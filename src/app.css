@@ -38,3 +38,7 @@
 	--depth: 1;
 	--noise: 1;
 }
+
+@theme {
+	--color-haze: oklch(0.96 0.0084 326.68);
+}
