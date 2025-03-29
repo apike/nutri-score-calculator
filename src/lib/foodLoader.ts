@@ -1,4 +1,5 @@
 export interface Food {
+	id?: string; // Stable ID for navigation
 	name: string;
 	allenNote: string;
 	category: string;
@@ -26,6 +27,13 @@ function initUserFoodsFromStorage(): void {
 		if (storedFoods) {
 			try {
 				userAddedFoods = JSON.parse(storedFoods);
+				// Ensure user foods have stable IDs
+				userAddedFoods = userAddedFoods.map((food) => {
+					if (!food.id) {
+						food.id = `user-${food.name.replace(/\s+/g, '-').toLowerCase()}`;
+					}
+					return food;
+				});
 			} catch (error) {
 				console.error('Failed to parse user foods from local storage:', error);
 			}
@@ -66,7 +74,7 @@ export async function loadFoods(): Promise<Food[]> {
 
 		const csvFoods = lines
 			.filter((line) => line.trim()) // Skip empty lines
-			.map((line) => {
+			.map((line, index) => {
 				// Parse CSV line, handling quoted fields
 				const fields: string[] = [];
 				let currentField = '';
@@ -120,8 +128,11 @@ export async function loadFoods(): Promise<Food[]> {
 					return num;
 				};
 
+				const cleanName = cleanQuotes(name);
+
 				return {
-					name: cleanQuotes(name),
+					id: `csv-${index}`, // Create a stable ID for CSV foods
+					name: cleanName,
 					allenNote: cleanQuotes(allenNote),
 					category: cleanQuotes(category),
 					source: cleanQuotes(source),
@@ -146,6 +157,10 @@ export async function loadFoods(): Promise<Food[]> {
 
 // Function to add a new food to the in-memory array and save to local storage
 export function addNewFood(food: Food): void {
+	// Add a stable ID to the new food
+	if (!food.id) {
+		food.id = `user-${food.name.replace(/\s+/g, '-').toLowerCase()}`;
+	}
 	userAddedFoods = [food, ...userAddedFoods];
 	saveUserFoodsToStorage();
 }

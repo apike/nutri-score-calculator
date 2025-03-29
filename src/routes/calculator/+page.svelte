@@ -18,11 +18,43 @@
 	import FoodDetail from '../../components/FoodDetail.svelte';
 	import AddFoodForm from '../../components/AddFoodForm.svelte';
 	import TabList from '../../components/TabList.svelte';
+	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 
 	let foods: Food[] = $state([]);
+	let loading = $state(true);
+
 	onMount(async () => {
+		// Load the foods
 		foods = await loadFoods();
+		loading = false;
+
+		// After foods are loaded and we have foodScores ready, handle any ID in the URL
+		if (browser) {
+			// Set up browser navigation handling
+			window.addEventListener('popstate', handleUrlChange);
+			// Initial check on page load
+			handleUrlChange();
+		}
 	});
+
+	// URL handling for browser navigation
+	function handleUrlChange() {
+		if (loading || !foods.length) return;
+
+		const currentPath = window.location.pathname;
+		const idMatch = currentPath.match(/\/calculator\/([^\/]+)$/);
+
+		if (idMatch && idMatch[1]) {
+			const foodId = idMatch[1];
+			// Search for the food with this ID
+			const foundFood = foodScores.find((f) => f.id === foodId);
+			if (foundFood) {
+				selectedFood = foundFood;
+				addingFood = false;
+			}
+		}
+	}
 
 	// Category filter state
 	let selectedCategory: 'all' | 'cereal' | 'snack' = $state('all');
@@ -63,6 +95,13 @@
 			})
 	);
 
+	// When foodScores changes (after initial load), check the URL again
+	$effect(() => {
+		if (foodScores.length > 0 && loading === false) {
+			handleUrlChange();
+		}
+	});
+
 	// Filter foods based on selected category
 	let filteredFoodScores = $derived(
 		foodScores.filter((food) => {
@@ -86,6 +125,24 @@
 		  })
 		| null = $state(null);
 
+	// Update URL when selectedFood changes without triggering a reload
+	$effect(() => {
+		if (!browser || loading) return;
+
+		if (selectedFood && selectedFood.id) {
+			const url = `/calculator/${selectedFood.id}`;
+			// Don't update if we're already on this URL (prevents loops)
+			if (window.location.pathname !== url) {
+				window.history.pushState({ foodId: selectedFood.id }, '', url);
+			}
+		} else if (!selectedFood) {
+			// Only update URL if we're not already on the base URL
+			if (window.location.pathname !== '/calculator') {
+				window.history.pushState({}, '', '/calculator');
+			}
+		}
+	});
+
 	// Track if we're in add food mode
 	let addingFood = $state(false);
 
@@ -95,16 +152,13 @@
 		foods = [newFood, ...foods];
 		addingFood = false;
 
-		// Calculate score for new food and select it
-		const nutrients = nutrientsFromFood(newFood);
-		const score = computeFNSpoints(nutrients);
-		const scoreWithProtein = computeFNSpoints(nutrients, true);
-		selectedFood = {
-			...newFood,
-			nutriScore: nutriScoreLetter(score),
-			fnsScore: score,
-			fnsScoreWithProtein: scoreWithProtein
-		};
+		// Find the new food in foodScores after next event loop
+		setTimeout(() => {
+			const addedFood = foodScores.find((f) => f.name === newFood.name);
+			if (addedFood) {
+				selectedFood = addedFood;
+			}
+		}, 0);
 	}
 
 	// Function to remove a user food
@@ -117,6 +171,14 @@
 				selectedFood = null;
 			}
 		}
+	}
+
+	// Function to select a food and update URL
+	function selectFood(
+		food: Food & { nutriScore: string; fnsScore: number; fnsScoreWithProtein: number }
+	) {
+		selectedFood = food;
+		addingFood = false;
 	}
 </script>
 
@@ -149,45 +211,45 @@
 
 		<!-- Table with overflow - only this area should scroll -->
 		<div class="flex-1 overflow-auto overscroll-contain rounded-xl bg-white/90">
-			<table class="table-zebra table w-full">
-				<thead class="bg-base-100 sticky top-0 z-10">
-					<tr>
-						<th class="whitespace-nowrap">Name</th>
-						<th class="whitespace-nowrap">Note</th>
-						<th class="whitespace-nowrap">Nutri-Score</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each filteredFoodScores as food}
-						<tr
-							class="cursor-pointer"
-							onclick={() => {
-								selectedFood = food;
-								addingFood = false;
-							}}
-						>
-							<td>
-								{#if selectedFood && food.name === selectedFood.name}
-									<span class="text-primary">►</span>
-								{/if}
-								{food.name}
-							</td>
-							<td class="max-w-xs">{food.allenNote}</td>
-							<td>
-								<span
-									class="rounded-md px-2 py-1 font-bold"
-									style="background-color: {nutriScoreColor(
-										food.nutriScore
-									)}; color: {nutriScoreTextColor(food.nutriScore)}"
-								>
-									{food.nutriScore}
-								</span>
-								<span class="text-base-content">({food.fnsScoreWithProtein})</span>
-							</td>
+			{#if loading}
+				<div class="flex h-full items-center justify-center">
+					<span class="loading loading-spinner loading-lg"></span>
+				</div>
+			{:else}
+				<table class="table-zebra table w-full">
+					<thead class="bg-base-100 sticky top-0 z-10">
+						<tr>
+							<th class="whitespace-nowrap">Name</th>
+							<th class="whitespace-nowrap">Note</th>
+							<th class="whitespace-nowrap">Nutri-Score</th>
 						</tr>
-					{/each}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{#each filteredFoodScores as food}
+							<tr class="cursor-pointer" onclick={() => selectFood(food)}>
+								<td>
+									{#if selectedFood && food.id === selectedFood.id}
+										<span class="text-primary">►</span>
+									{/if}
+									{food.name}
+								</td>
+								<td class="max-w-xs">{food.allenNote}</td>
+								<td>
+									<span
+										class="rounded-md px-2 py-1 font-bold"
+										style="background-color: {nutriScoreColor(
+											food.nutriScore
+										)}; color: {nutriScoreTextColor(food.nutriScore)}"
+									>
+										{food.nutriScore}
+									</span>
+									<span class="text-base-content">({food.fnsScoreWithProtein})</span>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			{/if}
 		</div>
 	</div>
 
@@ -205,13 +267,18 @@
 				onSave={addFood}
 				foodCount={getUserAddedFoodsCount()}
 			/>
-		{:else}
+		{:else if selectedFood}
 			<!-- Food detail -->
 			<FoodDetail
 				{selectedFood}
 				onClose={() => (selectedFood = null)}
 				onDelete={handleRemoveFood}
 			/>
+		{:else}
+			<!-- No food selected -->
+			<div class="flex h-full items-center justify-center">
+				<p class="text-center text-gray-500">Select a food to view details</p>
+			</div>
 		{/if}
 	</div>
 </div>

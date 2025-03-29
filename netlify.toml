@@ -1,0 +1,9 @@
+[build]
+  publish = "build"
+  command = "pnpm run build"
+
+# Handle direct navigation to any URL within the SPA
+[[redirects]]
+  from = "/calculator/*"
+  to = "/calculator"
+  status = 200
