@@ -17,6 +17,7 @@
 	import { onMount } from 'svelte';
 	import FoodDetail from '../../components/FoodDetail.svelte';
 	import AddFoodForm from '../../components/AddFoodForm.svelte';
+	import TabList from '../../components/TabList.svelte';
 
 	let foods: Food[] = $state([]);
 	onMount(async () => {
@@ -25,6 +26,18 @@
 
 	// Category filter state
 	let selectedCategory: 'all' | 'cereal' | 'snack' = $state('all');
+
+	// Define tabs for the TabList component
+	const categoryTabs = [
+		{ value: 'all', label: 'All Foods' },
+		{ value: 'cereal', label: 'Cereals' },
+		{ value: 'snack', label: 'Snacks' }
+	];
+
+	// Category selection handler
+	function handleCategorySelect(value: string) {
+		selectedCategory = value as 'all' | 'cereal' | 'snack';
+	}
 
 	// Calculate Nutri-Score for each food
 	let foodScores = $derived(
@@ -120,29 +133,7 @@
 		<!-- Flex container for tabs and Add Food button -->
 		<div class="mb-4 flex items-center justify-between">
 			<!-- Category Filter Tabs -->
-			<div role="tablist" class="tabs tabs-border">
-				<a
-					role="tab"
-					class="tab {selectedCategory === 'all' ? 'tab-active' : ''}"
-					onclick={() => (selectedCategory = 'all')}
-				>
-					All Foods
-				</a>
-				<a
-					role="tab"
-					class="tab {selectedCategory === 'cereal' ? 'tab-active' : ''}"
-					onclick={() => (selectedCategory = 'cereal')}
-				>
-					Cereals
-				</a>
-				<a
-					role="tab"
-					class="tab {selectedCategory === 'snack' ? 'tab-active' : ''}"
-					onclick={() => (selectedCategory = 'snack')}
-				>
-					Snacks
-				</a>
-			</div>
+			<TabList selected={selectedCategory} onSelect={handleCategorySelect} tabs={categoryTabs} />
 
 			<!-- Add Food button -->
 			<button
