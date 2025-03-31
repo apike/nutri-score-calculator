@@ -291,7 +291,7 @@
 
 			try {
 				isProcessing = true;
-				errorMessage = '';
+				errorMessage = 'Processing image...';
 
 				debugLog('Processing file', {
 					name: file.name,
@@ -356,6 +356,9 @@
 				// Store processed file for upload
 				processedFile = processedImageFile;
 
+				// Update status message for API request
+				errorMessage = 'Analyzing image...';
+
 				// Create form data
 				const formData = new FormData();
 				formData.append('file', processedFile);
@@ -392,6 +395,9 @@
 
 					// Set source to indicate it came from image scan
 					source = 'Image Scan';
+
+					// Show success message
+					errorMessage = 'Nutrition facts loaded.';
 				} else {
 					errorMessage = 'No nutrition label detected in the image.';
 				}
@@ -409,6 +415,17 @@
 		if (fileInput) {
 			fileInput.click();
 		}
+	}
+
+	// Check if a message is an error message
+	function isErrorMessage(message) {
+		const errorMessages = [
+			'No nutrition label detected in the image.',
+			'Error analyzing the image.',
+			'Error processing the image.'
+		];
+
+		return errorMessages.some((errMsg) => message.includes(errMsg));
 	}
 </script>
 
@@ -432,7 +449,9 @@
 					{isProcessing ? 'Processing...' : 'Add from Photo'}
 				</button>
 				{#if errorMessage}
-					<span class="text-error text-sm">{errorMessage}</span>
+					<span class={`text-sm ${isErrorMessage(errorMessage) ? 'text-error' : 'text-gray-700'}`}
+						>{errorMessage}</span
+					>
 				{/if}
 			</div>
 			<input
