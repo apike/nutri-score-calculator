@@ -126,7 +126,7 @@
 	<div class="mr-4 flex h-full w-full flex-col md:w-1/2 md:overflow-hidden">
 		<!-- Header section with no scrolling -->
 		<div class="mb-4 flex items-center justify-between select-none">
-			<h1 class="text-2xl font-bold">Nutri-Scoreometer</h1>
+			<h1 class="text-2xl font-bold">Nutri-Score Calculator</h1>
 			<a href="/" class="text-primary hover:underline">About</a>
 		</div>
 
