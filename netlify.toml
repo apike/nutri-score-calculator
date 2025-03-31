@@ -2,9 +2,9 @@
   publish = "build"
   command = "pnpm run build"
 
-# Special case for the dynamic calculator routes
+# SPA redirects - serve index.html for all routes
+# This maintains the URL in the browser while serving index.html
 [[redirects]]
-  from = "/calculator/*"
-  to = "/calculator"
+  from = "/*"
+  to = "/index.html"
   status = 200
-  force = false
