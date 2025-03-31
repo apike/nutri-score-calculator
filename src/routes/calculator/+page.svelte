@@ -40,12 +40,20 @@
 		if (browser) {
 			window.addEventListener('hashchange', () => {
 				const foodId = window.location.hash.substring(1);
-				if (foodId) {
-					selectFoodFromHash(foodId);
-				} else {
-					// Clear error state when hash is empty
+				if (foodId === 'addfood') {
+					// Show add food form
+					selectedFood = null;
+					addingFood = true;
 					hashNotFound = false;
 					invalidHash = '';
+				} else if (foodId) {
+					selectFoodFromHash(foodId);
+				} else {
+					// Reset view when hash is empty (back button pressed)
+					hashNotFound = false;
+					invalidHash = '';
+					selectedFood = null;
+					addingFood = false;
 				}
 			});
 		}
@@ -227,9 +235,9 @@
 					addingFood = true;
 					hashNotFound = false;
 					invalidHash = '';
-					// Clear hash when adding a new food
+					// Set hash to addfood
 					if (browser) {
-						window.location.hash = '';
+						window.location.hash = 'addfood';
 					}
 				}}
 			>
@@ -289,7 +297,7 @@
 				onClose={() => {
 					addingFood = false;
 					// Clear hash when closing the add form
-					if (browser && !selectedFood) {
+					if (browser) {
 						window.location.hash = '';
 					}
 				}}
