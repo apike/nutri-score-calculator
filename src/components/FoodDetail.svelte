@@ -69,7 +69,10 @@
 
 {#if selectedFood}
 	<!-- Mobile close button -->
-	<button class="btn btn-circle btn-ghost absolute top-4 right-4 md:hidden" onclick={onClose}>
+	<button
+		class="btn btn-circle btn-ghost absolute top-4 right-4 text-xl md:hidden"
+		onclick={onClose}
+	>
 		✕
 	</button>
 

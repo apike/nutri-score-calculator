@@ -56,7 +56,7 @@
 	<div class="flex items-center justify-between">
 		<h2 class="text-2xl font-bold">Add New Food</h2>
 		<!-- Mobile close button -->
-		<button class="btn btn-circle btn-ghost md:hidden" onclick={onClose}>✕</button>
+		<button class="btn btn-circle btn-ghost text-xl md:hidden" onclick={onClose}>✕</button>
 	</div>
 
 	<form

@@ -23,6 +23,10 @@
 	import { browser } from '$app/environment';
 
 	let foods: Food[] = $state([]);
+	// Track hash not found error state
+	let hashNotFound = $state(false);
+	let invalidHash = $state('');
+
 	onMount(async () => {
 		foods = await loadFoods();
 
@@ -36,7 +40,13 @@
 		if (browser) {
 			window.addEventListener('hashchange', () => {
 				const foodId = window.location.hash.substring(1);
-				selectFoodFromHash(foodId);
+				if (foodId) {
+					selectFoodFromHash(foodId);
+				} else {
+					// Clear error state when hash is empty
+					hashNotFound = false;
+					invalidHash = '';
+				}
 			});
 		}
 	});
@@ -47,7 +57,16 @@
 
 		const food = foods.find((f) => createFoodHash(f) === foodId);
 		if (food) {
+			// Clear error state
+			hashNotFound = false;
+			invalidHash = '';
 			selectFoodAndUpdateHash(food, false); // Don't update hash again
+		} else {
+			// Set error state
+			hashNotFound = true;
+			invalidHash = foodId;
+			selectedFood = null;
+			addingFood = false;
 		}
 	}
 
@@ -152,6 +171,9 @@
 	function selectFood(
 		food: Food & { nutriScore: string; fnsScore: number; fnsScoreWithProtein: number }
 	) {
+		// Clear error state
+		hashNotFound = false;
+		invalidHash = '';
 		selectedFood = food;
 		addingFood = false;
 
@@ -203,6 +225,8 @@
 				onclick={() => {
 					selectedFood = null;
 					addingFood = true;
+					hashNotFound = false;
+					invalidHash = '';
 					// Clear hash when adding a new food
 					if (browser) {
 						window.location.hash = '';
@@ -254,7 +278,8 @@
 	<!-- Food detail or add food form -->
 	<div
 		class="bg-base-100 overflow-auto rounded-xl transition-all duration-300 md:w-1/2 {addingFood ||
-		selectedFood
+		selectedFood ||
+		hashNotFound
 			? 'fixed inset-0 z-20 md:static md:z-auto'
 			: 'hidden md:block'}"
 	>
@@ -271,6 +296,29 @@
 				onSave={addFood}
 				foodCount={getUserAddedFoodsCount()}
 			/>
+		{:else if hashNotFound}
+			<!-- Food not found error -->
+			<div class="flex h-full flex-col items-center justify-center p-6">
+				<div class="text-center">
+					<h2 class="text-error mb-2 text-2xl font-bold">Food Not Found</h2>
+					<p class="m-6">
+						Could not find a food with this ID. Note that custom-added foods are saved in the
+						browser of the person who added them.
+					</p>
+					<button
+						class="btn btn-primary"
+						onclick={() => {
+							hashNotFound = false;
+							invalidHash = '';
+							if (browser) {
+								window.location.hash = '';
+							}
+						}}
+					>
+						Back to Food List
+					</button>
+				</div>
+			</div>
 		{:else}
 			<!-- Food detail -->
 			<FoodDetail
