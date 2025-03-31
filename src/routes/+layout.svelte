@@ -20,6 +20,15 @@
 	<meta name="twitter:title" content={metadata.title} />
 	<meta name="twitter:description" content={metadata.description} />
 	<meta name="twitter:image" content={metadata.image} />
+
+	<!-- Fathom - beautiful, simple website analytics -->
+	<script
+		src="https://cdn.usefathom.com/script.js"
+		data-spa="auto"
+		data-site="NPCSCSZG"
+		defer
+	></script>
+	<!-- / Fathom -->
 </svelte:head>
 
 {@render children()}
