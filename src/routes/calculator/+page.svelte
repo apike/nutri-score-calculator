@@ -27,6 +27,10 @@
 	let hashNotFound = $state(false);
 	let invalidHash = $state('');
 
+	// Search state
+	let isSearchMode = $state(false);
+	let searchQuery = $state('');
+
 	onMount(async () => {
 		foods = await loadFoods();
 
@@ -123,9 +127,14 @@
 			})
 	);
 
-	// Filter foods based on selected category
+	// Filter foods based on selected category and search query
 	let filteredFoodScores = $derived(
 		foodScores.filter((food) => {
+			// Filter by search query if in search mode
+			if (isSearchMode && searchQuery.trim() !== '') {
+				return food.name.toLowerCase().includes(searchQuery.toLowerCase());
+			}
+
 			// Always show user-added foods
 			if (food.category === 'user') return true;
 
@@ -224,8 +233,43 @@
 
 		<!-- Flex container for tabs and Add Food button -->
 		<div class="mb-4 flex items-center justify-between">
-			<!-- Category Filter Tabs -->
-			<TabList selected={selectedCategory} onSelect={handleCategorySelect} tabs={categoryTabs} />
+			<!-- Category Filter Tabs or Search Input -->
+			{#if isSearchMode}
+				<div class="mr-2 flex flex-1 items-center">
+					<input
+						type="text"
+						class="input input-bordered mr-2 flex-1"
+						placeholder="Search foods..."
+						bind:value={searchQuery}
+						autofocus
+					/>
+					<button
+						class="btn btn-square btn-ghost"
+						onclick={() => {
+							isSearchMode = false;
+							searchQuery = '';
+						}}
+					>
+						<span class="text-lg font-bold">&times;</span>
+					</button>
+				</div>
+			{:else}
+				<div class="flex items-center">
+					<TabList
+						selected={selectedCategory}
+						onSelect={handleCategorySelect}
+						tabs={categoryTabs}
+					/>
+					<button
+						class="btn btn-ghost btn-square ml-2"
+						onclick={() => {
+							isSearchMode = true;
+						}}
+					>
+						<span class="text-lg font-bold">🔍</span>
+					</button>
+				</div>
+			{/if}
 
 			<!-- Add Food button -->
 			<button
@@ -241,7 +285,7 @@
 					}
 				}}
 			>
-				<span class="mr-1">+</span> Add Food
+				<span class="mr-1">+</span> Add
 			</button>
 		</div>
 

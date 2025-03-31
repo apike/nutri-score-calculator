@@ -8,5 +8,7 @@ alwaysApply: true
 
 - This project uses Svelte 5 in Runes mode and SvelteKit 2 and runs as an SPA
   - This means no React in this project
+  - This also means event handkers use the syntax `onclick`, not `on:click`
+- Packages use `pnpm`, not `npm`
 - CSS is built with TailwindCSS 4 and DaisyUI 5
 - Keep things simple, always ask before proposing a new npm package
