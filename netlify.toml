@@ -2,8 +2,16 @@
   publish = "build"
   command = "pnpm run build"
 
-# Handle direct navigation to any URL within the SPA
+# Special case for the dynamic calculator routes
 [[redirects]]
   from = "/calculator/*"
   to = "/calculator"
   status = 200
+  force = false
+
+# Fallback for any non-file requests (must be the last rule)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
