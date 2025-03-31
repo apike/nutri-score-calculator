@@ -8,10 +8,3 @@
   to = "/calculator"
   status = 200
   force = false
-
-# Fallback for any non-file requests (must be the last rule)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
