@@ -18,11 +18,44 @@
 	import FoodDetail from '../../components/FoodDetail.svelte';
 	import AddFoodForm from '../../components/AddFoodForm.svelte';
 	import TabList from '../../components/TabList.svelte';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	let foods: Food[] = $state([]);
 	onMount(async () => {
 		foods = await loadFoods();
+
+		// Check for hash in URL on initial load
+		if (browser && window.location.hash) {
+			const foodId = window.location.hash.substring(1);
+			selectFoodFromHash(foodId);
+		}
+
+		// Listen for hash changes
+		if (browser) {
+			window.addEventListener('hashchange', () => {
+				const foodId = window.location.hash.substring(1);
+				selectFoodFromHash(foodId);
+			});
+		}
 	});
+
+	// Function to select food from hash
+	function selectFoodFromHash(foodId: string) {
+		if (!foods.length) return;
+
+		const food = foods.find((f) => createFoodHash(f) === foodId);
+		if (food) {
+			selectFoodAndUpdateHash(food, false); // Don't update hash again
+		}
+	}
+
+	// Create a unique hash for a food item
+	function createFoodHash(food: Food): string {
+		// Create a URL-friendly hash from the food name
+		return food.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+	}
 
 	// Category filter state
 	let selectedCategory: 'all' | 'cereal' | 'snack' = $state('all');
@@ -95,16 +128,8 @@
 		foods = [newFood, ...foods];
 		addingFood = false;
 
-		// Calculate score for new food and select it
-		const nutrients = nutrientsFromFood(newFood);
-		const score = computeFNSpoints(nutrients);
-		const scoreWithProtein = computeFNSpoints(nutrients, true);
-		selectedFood = {
-			...newFood,
-			nutriScore: nutriScoreLetter(score),
-			fnsScore: score,
-			fnsScoreWithProtein: scoreWithProtein
-		};
+		// Select the new food
+		selectFoodAndUpdateHash(newFood);
 	}
 
 	// Function to remove a user food
@@ -115,7 +140,44 @@
 
 			if (selectedFood && selectedFood.name === food.name) {
 				selectedFood = null;
+				// Clear hash when removing the currently selected food
+				if (browser) {
+					window.location.hash = '';
+				}
 			}
+		}
+	}
+
+	// Function to handle food selection with URL hash update
+	function selectFood(
+		food: Food & { nutriScore: string; fnsScore: number; fnsScoreWithProtein: number }
+	) {
+		selectedFood = food;
+		addingFood = false;
+
+		// Update URL hash
+		if (browser) {
+			window.location.hash = createFoodHash(food);
+		}
+	}
+
+	// Shared function to compute scores, select food and optionally update hash
+	function selectFoodAndUpdateHash(food: Food, updateHash = true) {
+		const nutrients = nutrientsFromFood(food);
+		const score = computeFNSpoints(nutrients);
+		const scoreWithProtein = computeFNSpoints(nutrients, true);
+
+		selectedFood = {
+			...food,
+			nutriScore: nutriScoreLetter(score),
+			fnsScore: score,
+			fnsScoreWithProtein: scoreWithProtein
+		};
+		addingFood = false;
+
+		// Update URL hash if needed
+		if (updateHash && browser) {
+			window.location.hash = createFoodHash(food);
 		}
 	}
 </script>
@@ -141,6 +203,10 @@
 				onclick={() => {
 					selectedFood = null;
 					addingFood = true;
+					// Clear hash when adding a new food
+					if (browser) {
+						window.location.hash = '';
+					}
 				}}
 			>
 				<span class="mr-1">+</span> Add Food
@@ -159,13 +225,7 @@
 				</thead>
 				<tbody>
 					{#each filteredFoodScores as food}
-						<tr
-							class="cursor-pointer"
-							onclick={() => {
-								selectedFood = food;
-								addingFood = false;
-							}}
-						>
+						<tr class="cursor-pointer" onclick={() => selectFood(food)}>
 							<td>
 								{#if selectedFood && food.name === selectedFood.name}
 									<span class="text-primary">►</span>
@@ -201,7 +261,13 @@
 		{#if addingFood}
 			<!-- Adding Food -->
 			<AddFoodForm
-				onClose={() => (addingFood = false)}
+				onClose={() => {
+					addingFood = false;
+					// Clear hash when closing the add form
+					if (browser && !selectedFood) {
+						window.location.hash = '';
+					}
+				}}
 				onSave={addFood}
 				foodCount={getUserAddedFoodsCount()}
 			/>
@@ -209,7 +275,13 @@
 			<!-- Food detail -->
 			<FoodDetail
 				{selectedFood}
-				onClose={() => (selectedFood = null)}
+				onClose={() => {
+					selectedFood = null;
+					// Clear hash when closing food detail
+					if (browser) {
+						window.location.hash = '';
+					}
+				}}
 				onDelete={handleRemoveFood}
 			/>
 		{/if}
