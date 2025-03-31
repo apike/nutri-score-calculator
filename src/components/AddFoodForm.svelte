@@ -32,12 +32,6 @@
 	let fruitVegPercent = 0;
 
 	onMount(() => {
-		// Select the text in the name input field
-		if (nameInput) {
-			nameInput.focus();
-			nameInput.select();
-		}
-
 		// Load HEIC library
 		loadHeicLibrary().catch((error) => {
 			console.error('Error loading HEIC library:', error);
@@ -143,6 +137,13 @@
 			fileInput.click();
 		}
 	}
+
+	// Function to select all text in the name input
+	function selectAllText(e: FocusEvent) {
+		if (e.target instanceof HTMLInputElement) {
+			e.target.select();
+		}
+	}
 </script>
 
 <div class="p-6">
@@ -179,6 +180,8 @@
 				class="hidden"
 			/>
 		</div>
+		<p class="mt-2 text-sm text-gray-500">Take a clear photo of the food's Nutrition Facts.</p>
+		<hr class="my-3 border-gray-300" />
 	</div>
 
 	<form
@@ -200,6 +203,7 @@
 				bind:this={nameInput}
 				required
 				autocomplete="off"
+				onfocus={selectAllText}
 			/>
 		</div>
 
@@ -326,6 +330,9 @@
 					max="100"
 					inputmode="numeric"
 				/>
+				<p class="mt-1 text-sm text-gray-500">
+					Guess how much of this food is whole fruit or veg. Typically 0.
+				</p>
 			</div>
 		</div>
 
