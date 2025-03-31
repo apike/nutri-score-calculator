@@ -170,6 +170,10 @@
 						class={`text-sm ${messageType === 'error' ? 'text-error' : messageType === 'success' ? 'text-success' : 'text-gray-700'}`}
 						>{errorMessage}</span
 					>
+				{:else}
+					<span class="text-sm text-gray-500"
+						>Take a clear photo of the food's Nutrition Facts.</span
+					>
 				{/if}
 			</div>
 			<input
@@ -180,7 +184,6 @@
 				class="hidden"
 			/>
 		</div>
-		<p class="mt-2 text-sm text-gray-500">Take a clear photo of the food's Nutrition Facts.</p>
 		<hr class="my-3 border-gray-300" />
 	</div>
 

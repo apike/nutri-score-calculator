@@ -44,6 +44,7 @@
 		if (browser) {
 			window.addEventListener('hashchange', () => {
 				const foodId = window.location.hash.substring(1);
+
 				if (foodId === 'addfood') {
 					// Show add food form
 					selectedFood = null;
@@ -65,9 +66,15 @@
 
 	// Function to select food from hash
 	function selectFoodFromHash(foodId: string) {
-		if (!foods.length) return;
+		if (!foods.length) {
+			return;
+		}
 
-		const food = foods.find((f) => createFoodHash(f) === foodId);
+		const food = foods.find((f) => {
+			const hash = createFoodHash(f);
+			return hash === foodId;
+		});
+
 		if (food) {
 			// Clear error state
 			hashNotFound = false;
@@ -160,12 +167,28 @@
 
 	// Function to add a new food to the list
 	function addFood(newFood: Food) {
+		// Add food to storage
 		addNewFood(newFood);
-		foods = [newFood, ...foods];
-		addingFood = false;
 
-		// Select the new food
-		selectFoodAndUpdateHash(newFood);
+		// Update the foods array with the new food
+		foods = [newFood, ...foods];
+
+		// Clear search filters
+		isSearchMode = false;
+		searchQuery = '';
+
+		// Exit add food mode and clear hash first
+		addingFood = false;
+		if (browser) {
+			// Remove the 'addfood' hash first
+			window.location.hash = '';
+		}
+
+		// Wait a tick for the hash clear to register
+		setTimeout(() => {
+			// Use the existing function to select the food and update hash
+			selectFoodAndUpdateHash(newFood, true);
+		}, 0);
 	}
 
 	// Function to remove a user food
@@ -212,11 +235,13 @@
 			fnsScore: score,
 			fnsScoreWithProtein: scoreWithProtein
 		};
+
 		addingFood = false;
 
 		// Update URL hash if needed
 		if (updateHash && browser) {
-			window.location.hash = createFoodHash(food);
+			const hash = createFoodHash(food);
+			window.location.hash = hash;
 		}
 	}
 </script>
@@ -279,6 +304,9 @@
 					addingFood = true;
 					hashNotFound = false;
 					invalidHash = '';
+					// Clear search filter
+					isSearchMode = false;
+					searchQuery = '';
 					// Set hash to addfood
 					if (browser) {
 						window.location.hash = 'addfood';
