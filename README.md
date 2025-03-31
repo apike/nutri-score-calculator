@@ -23,7 +23,8 @@ You can preview the production build with `pnpm run preview`.
 
 ## TODOS
 
+- Add back button support on mobile
 - Add FAQ about protein
+- Fill item from image w/ Gemini
 - Form fields should select text when you select them
-- Fill item from image (Gemini?)
 - Make nicer
